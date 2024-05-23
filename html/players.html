@@ -1,0 +1,29 @@
+<!DOCTYPE html> 
+<html>
+    <head>
+        <script src="../js/players.js"></script>
+        <link rel="stylesheet" 
+            href="./styles/menu.css">
+        <title> Memory - Menú </title>
+    </head>
+    <body>
+        <div id="container">
+            <div id="gods">
+                <h1>DIOSES</h1>
+                <label for="num-gods">Nº de Dioses</label>
+                <input type="number" id="num-gods" value="0" min="1" max="5" onchange="createPlayerInputs('gods')">
+                <div id="gods-players-container" class="player-container"></div>
+            </div>
+            <div id="titans">
+                <h1>TITANES</h1>
+                <label for="num-titans">Nº de Titanes</label>
+                <input type="number" id="num-titans" value="0" min="1" max="5" onchange="createPlayerInputs('titans')">
+                <div id="titans-players-container" class="player-container"></div>
+            </div>
+            <button id="play" class="button"> Jugar </button>
+            <footer>
+                <p>Los integrantes facheros</p>
+            </footer>
+        </div>
+    </body>
+</html>

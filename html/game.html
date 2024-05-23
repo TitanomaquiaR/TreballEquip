@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory - Juego</title>
+    <link rel="stylesheet" href="./styles/game.css">
+</head>
+<body>
+    <div id="game-container">
+        <h1>Juego de Memory</h1>
+        <div id="board">
+            <div id="gods-section">
+                <h2>Dioses</h2>
+                <!-- Aquí se mostrarán las posiciones de los dioses -->
+            </div>
+            <div id="titans-section">
+                <h2>Titanes</h2>
+                <!-- Aquí se mostrarán las posiciones de los titanes -->
+            </div>
+        </div>
+        <button id="roll-dice">Tirar Dado</button>
+        <div id="message"></div>
+    </div>
+
+    <div id="duel-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>¡Duelo!</h2>
+            <p>Ambos jugadores apuestan:</p>
+            <input type="number" id="duel-bet" min="1">
+            <button id="start-duel">Iniciar Duelo</button>
+            <div id="duel-result"></div>
+        </div>
+    </div>
+
+    <script src="../js/game.js"></script>
+</body>
+</html>
