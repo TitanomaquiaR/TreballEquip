@@ -23,14 +23,26 @@
         <div id="message"></div>
     </div>
 
-    <div id="duel-modal" class="modal">
+    <!-- Modal de duelo -->
+    <div id="duelModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>¡Duelo!</h2>
-            <p>Ambos jugadores apuestan:</p>
-            <input type="number" id="duel-bet" min="1">
-            <button id="start-duel">Iniciar Duelo</button>
-            <div id="duel-result"></div>
+            <span id="closeModal" class="close">&times;</span>
+            <p id="duelInfo"></p>
+            <input type="number" id="duelBetInput" placeholder="Cantidad a apostar">
+            <button id="startDuelButton">Iniciar Duelo</button>
+            <div id="duelResult"></div>
+            <button id="godRollButton" style="display:none;">Dios tira dado</button>
+            <button id="titanRollButton" style="display:none;">Titán tira dado</button>
+        </div>
+    </div>
+
+    <!-- Modal de tienda -->
+    <div id="storeModal" class="modal">
+        <div class="modal-content">
+            <span id="closeStoreModal" class="close">&times;</span>
+            <p id="storeInfo">¡Has llegado a la tienda! Compra piezas de armadura.</p>
+            <button id="buyArmorButton">Comprar pieza de armadura</button>
+            <div id="storeResult"></div>
         </div>
     </div>
 
