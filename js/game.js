@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const storeModal = document.getElementById('storeModal');
     const closeStoreModal = document.getElementById('closeStoreModal');
     const buyArmorButton = document.getElementById('buyArmorButton');
+    const notBuyArmorButton = document.getElementById('notBuyArmorButton');
     const storeResult = document.getElementById('storeResult');
 
     // Función para actualizar la visualización del tablero
@@ -108,19 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
         if (turn === "god") { // Se cambia porque antes se hace el cambio de turno (Aquí verifica si el jugador actual es dios) [YA NO]
             if ((currentPlayer.position === 2 && (titanAt2 || titanAt7)) || 
                 (currentPlayer.position === 7 && (titanAt2 || titanAt7))) {
-                console.log("HAY DUELO SEÑOREEEEEEES");
-                duelPlayers.push(titanAt2 || titanAt7);
                 duelPlayers.push(currentPlayer);
-                console.log(duelPlayers);
+                duelPlayers.push(titanAt2 || titanAt7);
                 startDuel();
             }
         } else {
             if ((currentPlayer.position === 2 && (godAt2 || godAt7)) || 
                 (currentPlayer.position === 7 && (godAt2 || godAt7))) {
-                console.log("HAY DUELO SEÑOREEEEEEES");
                 duelPlayers.push(godAt2 || godAt7);
                 duelPlayers.push(currentPlayer);
-                console.log(duelPlayers);
                 startDuel();
             }
         }
@@ -128,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Función para iniciar el duelo
     function startDuel() {
+        rollDiceButton.disabled = true;
         duelActive = true;
         duelModal.style.display = 'block';
         duelInfo.textContent = `¡Duelo entre ${duelPlayers[0].name} (${duelPlayers[0].type}) y ${duelPlayers[1].name} (${duelPlayers[1].type})!`;
@@ -167,6 +165,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         duelPlayers[0].bet = betAmount;
         duelPlayers[1].bet = betAmount;
+        duelPlayers[0].roll = undefined
+        duelPlayers[1].roll = undefined
 
         godRollButton.style.display = 'block';
         titanRollButton.style.display = 'block';
@@ -174,22 +174,36 @@ document.addEventListener('DOMContentLoaded', () => {
         duelBetInput.style.display = 'none';
     });
 
+    function repetirDuelo(){
+        duelPlayers[0].roll = undefined
+        duelPlayers[1].roll = undefined
+
+        godRollButton.style.display = 'block';
+        titanRollButton.style.display = 'block';
+        startDuelButton.style.display = 'none';
+        duelBetInput.style.display = 'none';
+    }
+
     godRollButton.addEventListener('click', () => {
         duelPlayers[0].roll = Math.floor(Math.random() * 6) + 1;
+        console.log("Dios: " + duelPlayers[0].roll)
         duelResult.textContent += `\n${duelPlayers[0].name} tiró un ${duelPlayers[0].roll}.`;
         godRollButton.style.display = 'none';
 
         if (duelPlayers[1].roll !== undefined) {
+            console.log("Resuelve duelo (g)")
             resolveDuel();
         }
     });
 
     titanRollButton.addEventListener('click', () => {
         duelPlayers[1].roll = Math.floor(Math.random() * 6) + 1;
+        console.log("Titán: " + duelPlayers[1].roll)
         duelResult.textContent += `\n${duelPlayers[1].name} tiró un ${duelPlayers[1].roll}.`;
         titanRollButton.style.display = 'none';
 
         if (duelPlayers[0].roll !== undefined) {
+            console.log("Resuelve duelo (t)")
             resolveDuel();
         }
     });
@@ -197,28 +211,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function resolveDuel() {
         const [god, titan] = duelPlayers;
 
-        while (god.roll === titan.roll) {
+        if(god.roll === titan.roll) {
             duelResult.textContent += '\n¡Empate! Tirando de nuevo...';
-            god.roll = Math.floor(Math.random() * 6) + 1;
-            titan.roll = Math.floor(Math.random() * 6) + 1;
-            duelResult.textContent += `\n${god.name} tiró un ${god.roll}. ${titan.name} tiró un ${titan.roll}.`;
+            repetirDuelo()
+        } else {
+            const winner = god.roll > titan.roll ? god : titan;
+            const loser = god.roll > titan.roll ? titan : god;
+    
+            winner.gold += god.bet * 2;
+            loser.gold -= titan.bet;
+    
+            duelResult.textContent += `\n${winner.name} gana el duelo y se lleva ${god.bet * 3} monedas!`;
+    
+            rollDiceButton.disabled = false;
+            updateBoard();
+            duelPlayers = [];
+            duelActive = false;
+            startDuelButton.style.display = 'block';
+            duelBetInput.style.display = 'block';
+            godRollButton.style.display = 'none';
+            titanRollButton.style.display = 'none';
         }
-
-        const winner = god.roll > titan.roll ? god : titan;
-        const loser = god.roll > titan.roll ? titan : god;
-
-        winner.gold += god.bet * 3;
-        loser.gold -= titan.bet;
-
-        duelResult.textContent += `\n${winner.name} gana el duelo y se lleva ${god.bet * 3} monedas!`;
-
-        updateBoard();
-        duelPlayers = [];
-        duelActive = false;
-        startDuelButton.style.display = 'block';
-        duelBetInput.style.display = 'block';
-        godRollButton.style.display = 'none';
-        titanRollButton.style.display = 'none';
     }
 
     // Función para verificar si hay una tienda
@@ -262,7 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!storeActive) return;
     
         currentPlayer = storePlayer;
-        if (currentPlayer.gold <= 1) {
+        if (currentPlayer.gold < armorPrice) {
             storeResult.textContent = 'No tienes suficientes monedas para comprar piezas de armadura.';
             return;
         }
@@ -273,8 +286,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
         closeStore();
         updateBoard();
-        storeActive = false;
-        storeModal.style.display = 'none';
     
         const godsTotalArmor = calculateTotalArmor(gods);
         const titansTotalArmor = calculateTotalArmor(titans);
@@ -284,6 +295,13 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(`El equipo ganador es ${winningTeam}!`);
             window.location.href = '../index.html'; // Redirigir a index.html
         }
+    }
+
+    // Función para no comprar piezas de armadura
+    notBuyArmorButton.onclick = function() {
+        storeResult.textContent = 'Has decidido no comprar ninguna pieza de armadura.';
+        closeStore();
+        updateBoard();
     }
 
     // Inicializar el tablero al cargar
