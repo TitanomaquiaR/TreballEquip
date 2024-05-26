@@ -13,8 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let storeActive = false;
 
     // Inicializa las posiciones de los jugadores, monedas y piezas de armadura
-    const gods = godsPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
-    const titans = titansPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
+    let gods = godsPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
+    let titans = titansPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
 
     const godsSection = document.getElementById('gods-section');
     const titansSection = document.getElementById('titans-section');
@@ -33,6 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const buyArmorButton = document.getElementById('buyArmorButton');
     const notBuyArmorButton = document.getElementById('notBuyArmorButton');
     const storeResult = document.getElementById('storeResult');
+    const pauseButton = document.getElementById('pause-button');
+    const pauseMenu = document.getElementById('pauseMenu');
+    const closePauseMenu = document.getElementById('closePauseMenu');
+    const continueGameButton = document.getElementById('continueGameButton');
+    const saveGameButton = document.getElementById('saveGameButton');
+    const exitWithoutSavingButton = document.getElementById('exitWithoutSavingButton');
 
     // Función para actualizar la visualización del tablero
     function updateBoard() {
@@ -69,10 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (turn === 'god') {
             currentPlayer = gods[currentPlayerIndex % gods.length];
-            //turn = 'titan'; // Cambia el turno a los titanes
         } else {
             currentPlayer = titans[currentPlayerIndex % titans.length];
-            //turn = 'god'; // Cambia el turno a los dioses
             currentPlayerIndex++; // Solo incrementa el índice después de que ambos, dios y titán, hayan jugado
         }
 
@@ -234,74 +238,105 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Función para verificar si hay una tienda
+    // Función para verificar si el jugador entra en la tienda
     function checkForStore(currentPlayer) {
         if (currentPlayer.position === 5) {
-            messageElement.textContent = `${currentPlayer.name} (${currentPlayer.type}) ha llegado a la tienda en la casilla 5 y debe comprar una pieza de armadura.`;
             storeActive = true;
-            storePlayer = currentPlayer
+            storePlayer = currentPlayer;
+            rollDiceButton.disabled = true;
             storeModal.style.display = 'block';
-            rollDiceButton.disabled = true; // Desactivar el botón de tirar dado
+            storeResult.textContent = `¿Quieres comprar una pieza de armadura por ${armorPrice} monedas?`;
         }
     }
 
     // Función para cerrar el modal de la tienda
-    function closeStore() {
+    closeStoreModal.onclick = function() {
         storeModal.style.display = 'none';
         storeActive = false;
-        rollDiceButton.disabled = false; // Activar nuevamente el botón de tirar dado
+        rollDiceButton.disabled = false;
     }
 
-    // Evento para cerrar el modal de la tienda al hacer clic en el botón de cerrar
-    closeStoreModal.onclick = closeStore;
-
-    // Evento para cerrar el modal de la tienda al hacer clic fuera de él
     window.onclick = function(event) {
         if (event.target == storeModal) {
-            closeStore();
+            storeModal.style.display = 'none';
+            storeActive = false;
+            rollDiceButton.disabled = false;
         }
     }
 
-    function calculateTotalArmor(team) {
-        let totalArmor = 0;
-        team.forEach(player => {
-            totalArmor += player.armorPieces;
-        });
-        return totalArmor;
-    }
-
-    // Función para comprar piezas de armadura
+    // Función para manejar la compra de armadura
     buyArmorButton.onclick = function() {
-        if (!storeActive) return;
-    
-        currentPlayer = storePlayer;
-        if (currentPlayer.gold < armorPrice) {
-            storeResult.textContent = 'No tienes suficientes monedas para comprar piezas de armadura.';
-            return;
+        if (storePlayer.gold >= armorPrice) {
+            storePlayer.gold -= armorPrice;
+            storePlayer.armorPieces += 1;
+            storeResult.textContent = `${storePlayer.name} (${storePlayer.type}) compró una pieza de armadura.`;
+        } else {
+            storeResult.textContent = `${storePlayer.name} (${storePlayer.type}) no tiene suficientes monedas.`;
         }
-    
-        currentPlayer.gold -= armorPrice;
-        currentPlayer.armorPieces += 1;
-        storeResult.textContent = `Has comprado una pieza de armadura por ${armorPrice} monedas. Te quedan ${currentPlayer.gold} monedas y tienes ${currentPlayer.armorPieces} piezas de armadura.`;
-    
-        closeStore();
+
+        storeActive = false;
+        rollDiceButton.disabled = false;
+        storeModal.style.display = 'none';
         updateBoard();
-    
-        const godsTotalArmor = calculateTotalArmor(gods);
-        const titansTotalArmor = calculateTotalArmor(titans);
-    
-        if (godsTotalArmor >= options.pieces || titansTotalArmor >= options.pieces) {
-            const winningTeam = godsTotalArmor >= options.pieces ? 'Dioses' : 'Titanes';
-            alert(`El equipo ganador es ${winningTeam}!`);
-            window.location.href = '../index.html'; // Redirigir a index.html
-        }
     }
 
-    // Función para no comprar piezas de armadura
     notBuyArmorButton.onclick = function() {
-        storeResult.textContent = 'Has decidido no comprar ninguna pieza de armadura.';
-        closeStore();
-        updateBoard();
+        storeActive = false;
+        rollDiceButton.disabled = false;
+        storeModal.style.display = 'none';
+    }
+
+    // Pausar el juego
+    pauseButton.addEventListener('click', () => {
+        pauseMenu.style.display = 'block';
+        rollDiceButton.disabled = true;
+    });
+
+    closePauseMenu.addEventListener('click', () => {
+        pauseMenu.style.display = 'none';
+    });
+
+    continueGameButton.addEventListener('click', () => {
+        pauseMenu.style.display = 'none';
+        rollDiceButton.disabled = false;
+    });
+
+    exitWithoutSavingButton.addEventListener('click', () => {
+        window.location.href = '../index.html'; // Redirigir a index.html
+    });
+
+    saveGameButton.addEventListener('click', () => {
+        saveGame();
+        pauseMenu.style.display = 'none';
+        rollDiceButton.disabled = false;
+    });
+
+    // Función para guardar el estado del juego en localStorage
+    function saveGame() {
+        const gameState = {
+            gods,
+            titans,
+            currentPlayerIndex,
+            turn
+        };
+        localStorage.setItem('savedGameState', JSON.stringify(gameState));
+        alert('Partida guardada exitosamente.');
+        window.location.href = '../index.html'; // Redirigir a index.html
+    }
+
+    // Función para cargar una partida guardada
+    function loadGame() {
+        const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
+        if (savedGameState) {
+            gods = savedGameState.gods;
+            titans = savedGameState.titans;
+            currentPlayerIndex = savedGameState.currentPlayerIndex;
+            turn = savedGameState.turn;
+            updateBoard();
+            messageElement.textContent = 'Partida cargada exitosamente.';
+        } else {
+            alert('No hay partidas guardadas.');
+        }
     }
 
     // Inicializar el tablero al cargar
@@ -309,4 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Asignar el evento al botón de tirar dado
     rollDiceButton.onclick = rollDice;
+    
+    // Si hay una partida guardada y estamos cargando desde el index, cargarla
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('loadGame') === 'true') {
+        loadGame();
+    }
 });
