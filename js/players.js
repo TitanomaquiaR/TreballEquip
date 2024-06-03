@@ -51,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('titansPlayers', JSON.stringify(titansPlayers));
 
         // Redirigir a la página del juego (modifica 'game.html' con la URL real de tu juego)
+
         window.location.href = 'game.html';
     });
 

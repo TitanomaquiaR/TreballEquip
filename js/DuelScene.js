@@ -135,8 +135,10 @@ class DuelScene extends Phaser.Scene {
             const player2 = this.duelPlayers[1];
 
             if(this.player1Score == this.player2Score){
-                this.startDuel()
                 this.duelInfo.setText(`¡Empate, tirad de nuevo!`);
+                setTimeout(() => {
+                    this.startDuel()
+                }, 1000)
             } else if (this.player1Score > this.player2Score){
                 this.duelInfo.setText(`¡${player1.name} ganó el duelo!`);
                 player1.gold += this.bet*2
