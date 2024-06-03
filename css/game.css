@@ -1,12 +1,87 @@
-body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-    margin: 0;
+/*BODY AND GENERAL STYLING*/
+*{
+    box-sizing: border-box;
 }
+
+:root{
+	--darkblue: #717790;
+    --blue: #b8cadf;
+    --pink: #e5c6c3;
+    --darkpink: #926464;
+    --green: #b8dbc0;
+    --darkgreen: #556564;
+    --white: #eee7e2;
+}
+
+@font-face {
+	font-family: 'Greconian';
+	src: url('../assets/greconian/Greconian.ttf');
+}
+
+@font-face {
+	font-family: 'Selanik';
+	src: url('../assets/greconian/salih-kizilkaya-sk-selanik/Salih\ Kizilkaya\ -\ SK\ Selanik\ Rounded\ Regular.ttf');
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    padding: 30px;
+    margin: 0px;
+    overflow: scroll;
+    font-family: 'Selanik';
+    background-color: var(--white);
+}
+
+.app{
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 20px;
+    gap: 1px;
+    position: relative;
+}
+
+.button{
+    font-family: 'Greconian';
+    width: 100%;
+    padding: 8px;
+    border-radius: 15px;
+    color: var(--darkblue);
+    background-color: var(--green);
+    border: none;
+    font-size: 35px;
+    box-shadow: 0 6px var(--darkgreen);
+}
+
+.button::hover{
+    background-color: var(--pink);
+}
+
+.button::active{
+    background-color: var(--pink);
+    color: var(--darkpink);
+    box-shadow: 0 0px --white;
+    transform: translateY(4px);
+}
+
+h1{
+    font-family: 'Greconian';
+    font-size: 60px;
+}
+
+#equipo{
+    display: flex;
+    overflow: visible;
+    justify-content: space-evenly;
+}
+
+#container{
+    display: flex;
+    gap: 8pc;
+}
+
+/*GAME STYLING*/
 
 #game-container {
     text-align: center;
