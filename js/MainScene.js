@@ -61,20 +61,6 @@ class MainScene extends Phaser.Scene {
 
         this.updateBoard();
 
-        if (this.duelActive) {
-            console.log("Duelo activo")
-            console.log(this.gods)
-            console.log(this.titans)
-            return;
-        }
-
-        if (this.storeActive) {
-            console.log("Tienda activa")
-            console.log(this.gods)
-            console.log(this.titans)
-            return;
-        }
-
         const diceRoll = Math.floor(Math.random() * 6) + 1;
         let currentPlayer;
 
