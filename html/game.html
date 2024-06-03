@@ -3,65 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memory - Juego</title>
-    <link rel="stylesheet" href="./styles/game.css">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.js"></script>
+    <script type="module" src="../js/game.js"></script>
+    <title>Juego de Dioses y Titanes</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #game-container {
+            width: 800px;
+            height: 600px;
+        }
+    </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>Juego de Memory</h1>
-        <div id="board">
-            <div id="gods-section">
-                <h2>Dioses</h2>
-                <!-- Aquí se mostrarán las posiciones de los dioses -->
-            </div>
-            <div id="titans-section">
-                <h2>Titanes</h2>
-                <!-- Aquí se mostrarán las posiciones de los titanes -->
-            </div>
-        </div>
-        <button id="roll-dice">Tirar Dado</button>
-        <div id="message"></div>
-    </div>
-
-    <!-- Modal de duelo -->
-    <div id="duelModal" class="modal">
-        <div class="modal-content">
-            <span id="closeModal" class="close">&times;</span>
-            <p id="duelInfo"></p>
-            <input type="number" id="duelBetInput" placeholder="Cantidad a apostar">
-            <button id="startDuelButton">Iniciar Duelo</button>
-            <div id="duelResult"></div>
-            <button id="godRollButton" style="display:none;">Dios tira dado</button>
-            <button id="titanRollButton" style="display:none;">Titán tira dado</button>
-        </div>
-    </div>
-
-    <!-- Modal de tienda -->
-    <div id="storeModal" class="modal">
-        <div class="modal-content">
-            <span id="closeStoreModal" class="close">&times;</span>
-            <p id="storeInfo">¡Has llegado a la tienda! Compra piezas de armadura.</p>
-            <button id="buyArmorButton">Comprar pieza de armadura</button>
-            <button id="notBuyArmorButton">No comprar</button>
-            <div id="storeResult"></div>
-        </div>
-    </div>
-
-    <!-- Añadir después del botón "Tirar Dado" -->
-    <button id="pause-button">Pausa</button>
-
-    <!-- Menú de pausa -->
-    <div id="pauseMenu" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span id="closePauseMenu" class="close">&times;</span>
-            <button id="continueGameButton">Continuar Juego</button>
-            <button id="saveGameButton">Salir y Guardar</button>
-            <button id="exitWithoutSavingButton">Salir sin Guardar</button>
-        </div>
-    </div>
-
-
-
-    <script src="../js/game.js"></script>
+    <div id="game-container"></div>
 </body>
 </html>
