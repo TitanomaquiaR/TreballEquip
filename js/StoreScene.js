@@ -16,7 +16,9 @@ class StoreScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 300, 'tiendafondo').setOrigin(0.5);
+        this.add.image(0, 0, 'tiendafondo').setOrigin(0.5);
+        this.resizeBackground();
+        window.addEventListener('resize', ()=>this.resizeBackground());
 
         this.add.text(400, 100, 'Tienda', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
 
@@ -30,6 +32,18 @@ class StoreScene extends Phaser.Scene {
 
         const exitButton = this.add.text(400, 500, 'Salir', { fontSize: '18px',fontFamily: 'greconian', color: '#000' }).setOrigin(0.5).setInteractive();
         exitButton.on('pointerdown', () => this.exitStore());
+    }
+
+    resizeBackground() {
+        const { width, height } = this.sys.game.canvas;
+        const scaleX = width / this.background.width;
+        const scaleY = height / this.background.height;
+        const scale = Math.max(scaleX, scaleY);
+
+        this.background.setScale(scale).setScrollFactor(0);
+
+        this.cameras.main.setBounds(0, 0, width, height);
+        this.cameras.main.centerOn(width / 2, height / 2);
     }
 
     buyArmorPiece() {
