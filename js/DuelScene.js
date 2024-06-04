@@ -73,18 +73,6 @@ class DuelScene extends Phaser.Scene {
         this.dice2.setVisible(false)
     }
 
-    resizeBackground() {
-        const { width, height } = this.sys.game.canvas;
-        const scaleX = width / this.background.width;
-        const scaleY = height / this.background.height;
-        const scale = Math.max(scaleX, scaleY);
-
-        this.background.setScale(scale).setScrollFactor(0);
-
-        this.cameras.main.setBounds(0, 0, width, height);
-        this.cameras.main.centerOn(width / 2, height / 2);
-    }
-
     updateBetText(){
         this.betText.setText(this.bet)
     }
