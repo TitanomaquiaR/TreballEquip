@@ -16,7 +16,7 @@ class StoreScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 0, 'tiendafondo').setOrigin(0.5);
+        this.add.image(400, 400, 'tiendafondo').setOrigin(0.5);
         this.resizeBackground();
         window.addEventListener('resize', ()=>this.resizeBackground());
 
