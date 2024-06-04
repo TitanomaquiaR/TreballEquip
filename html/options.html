@@ -3,16 +3,21 @@
 <head>
     <script src="../library/jquery.min.js"></script>
     <script src="../js/options.js" type="module"></script>
-    <title> Opcions </title>
+    <title> OPCIONES </title>
     <link rel="stylesheet" href="../css/game.css">
 </head>
 <body>
     <div class="app">
-        <div class="options">
+        <header class="nav">
+            <div class="navigation">
+                <a href="../index.html"><p>TITANOMAQUIA</p></a>
+            </div>
+        </header>
+        <div class="options-wrapper">
             <h1>Opcions</h1>
                     <div id="options-sections">
                         <div id="armadura">
-                            <label for="pieces">P. Armaduras para ganar </label>
+                            <label for="pieces">Piezas de armadura necesarias </label>
                             <input type="number" id="pieces" min="2" max="6">
                         </div>
     
@@ -22,7 +27,7 @@
                         </div>
     
                         <div id="precio">
-                            <label for="price">Precio p. Armadura </label>
+                            <label for="price">Precio por pieza de armadura </label>
                             <input type="number" id="price" min="3" max="6">
                         </div>
                     </div>

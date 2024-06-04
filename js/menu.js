@@ -3,14 +3,14 @@ addEventListener('load', function() {
         // Lógica para iniciar una nueva partida
         // Redirigir a la página del juego
         localStorage.setItem('playSavedGame', JSON.stringify(false));
-        window.location.href = './html/players.html';
+        window.location.href = './players.html';
     });
 
     document.getElementById('loadGameButton').addEventListener('click', () => {
         if (localStorage.getItem('savedGameState')) {
             // Redirigir a la página del juego con parámetro de carga
             localStorage.setItem('playSavedGame', JSON.stringify(true));
-            window.location.href = './html/game.html';
+            window.location.href = './game.html';
         } else {
             alert('No hay partidas guardadas.');
         }
@@ -18,6 +18,6 @@ addEventListener('load', function() {
 
     document.getElementById('options').addEventListener('click', 
     function(){
-        window.location.assign("./html/options.html")
+        window.location.assign("./options.html")
     });
 });

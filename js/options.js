@@ -38,5 +38,5 @@ $('#default').on('click',function(){
 
 $('#apply').on('click',function(){
     options.applyChanges();
-    location.assign("../");
+    location.assign("./inicio.html");
 });
