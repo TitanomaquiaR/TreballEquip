@@ -5,7 +5,7 @@ import StoreScene from './StoreScene.js';
 var config = {
     type: Phaser.AUTO,
     domCreateContainer: true,
-    width: 1200,
+    width: 1500,
     height: 800,
     backgroundColor: '#ffffff',
     parent: 'game-container',

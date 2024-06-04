@@ -4,7 +4,6 @@ import StoreScene from './StoreScene.js';
 class MainScene extends Phaser.Scene {
     constructor() {
         super({ key: 'MainScene' });
-        // Variables y estado del juego
         this.boardSize = 10;
         this.currentPlayerIndex = 0;
         this.turn = 'god'; // Alterna entre 'god' y 'titan'
@@ -12,6 +11,33 @@ class MainScene extends Phaser.Scene {
         this.storePlayer = null;
         this.duelActive = false;
         this.storeActive = false;
+        this.boardPositions = [
+            { x: 700, y: 475 },
+            { x: 600, y: 410 },
+            { x: 550, y: 300 },
+            { x: 575, y: 180 },
+            { x: 700, y: 100 },
+            { x: 825, y: 100 },
+            { x: 925, y: 180 },
+            { x: 950, y: 300 },
+            { x: 900, y: 410 },
+            { x: 800, y: 475 }
+        ];
+    }
+
+    preload() {
+        // Cargar imágenes de los personajes y el tablero
+        const godsPlayers = JSON.parse(localStorage.getItem('godsPlayers')) || [];
+        const titansPlayers = JSON.parse(localStorage.getItem('titansPlayers')) || [];
+        
+        godsPlayers.forEach(player => {
+            this.load.image(player.name, `../assets/Personajes/${player.type}.png`);
+        });
+        titansPlayers.forEach(player => {
+            this.load.image(player.name, `../assets/Personajes/${player.type}.png`);
+        });
+
+        this.load.image('board', '../assets/board.jpg');
     }
 
     create() {
@@ -21,46 +47,88 @@ class MainScene extends Phaser.Scene {
         const godsPlayers = JSON.parse(localStorage.getItem('godsPlayers')) || [];
         const titansPlayers = JSON.parse(localStorage.getItem('titansPlayers')) || [];
 
-        //Mensajes
-        this.messageElement = this.add.text(100, 50, '', { fill: '#ffffff' });
+        // Añadir el tablero
+        const board = this.add.image(750, 300, 'board').setScale(0.5);
 
-        // Inicializa las posiciones de los jugadores, monedas y piezas de armadura
-        this.gods = godsPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
-        this.titans = titansPlayers.map(player => ({ ...player, position: 1, gold: initialGold, armorPieces: 0 }));
+        this.messageElement = this.add.text(50, 50, '', { fill: '#ffffff' });
 
-        // Crear el tablero visualmente
+        this.gods = godsPlayers.map(player => ({
+            ...player, position: 1, gold: initialGold, armorPieces: 0,
+            sprite: this.add.sprite(700, 475, player.name).setScale(0.05) // Inicializar sprite en la posición de la casilla 1
+        }));
+        this.titans = titansPlayers.map(player => ({
+            ...player, position: 1, gold: initialGold, armorPieces: 0,
+            sprite: this.add.sprite(700, 475, player.name).setScale(0.05) // Inicializar sprite en la posición de la casilla 1
+        }));
+
         this.createBoard();
 
-        // Botón para tirar el dado
-        this.rollDiceButton = this.add.text(400, 550, 'Tirar Dado', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.rollDiceButton = this.add.text(750, 650, 'Tirar Dado', { fontSize: '22px', color: '#000' }).setOrigin(0.5);
         this.rollDiceButton.setInteractive();
         this.rollDiceButton.on('pointerdown', () => this.rollDice());
 
-        // Botón de pausa
-        this.pauseButton = this.add.text(400, 580, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.pauseButton = this.add.text(750, 700, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
         this.pauseButton.setInteractive();
         this.pauseButton.on('pointerdown', () => this.pauseGame());
 
-        // Menú de pausa
         this.pauseMenu = this.add.container(400, 300).setVisible(false);
         this.createPauseMenu();
 
-        this.loadGame()
+        this.loadGame();
     }
 
     createBoard() {
-        this.godsSection = this.add.text(100, 100, 'Dioses', { fontSize: '24px', color: '#000' });
-        this.titansSection = this.add.text(100, 300, 'Titanes', { fontSize: '24px', color: '#000' });
+        const godsContainer = this.add.container(50, 50);
+        this.godsContainer = godsContainer
+        this.titansContainer = this.add.container(1075, 50);
+
+        this.godsText = this.add.text(150, 0, 'Dioses', { fontSize: '24px', color: '#000' });
+        this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
+
+        this.godsContainer.add(this.godsText);
+        this.titansContainer.add(this.titansText);
+
+        //this.godsSection = this.add.text(50, 100, 'Dioses', { fontSize: '24px', color: '#000' });
+        //this.titansSection = this.add.text(750, 100, 'Titanes', { fontSize: '24px', color: '#000' });
         this.updateBoard();
     }
 
     updateBoard() {
-        this.godsSection.setText('Dioses\n' + this.gods.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
-        this.titansSection.setText('Titanes\n' + this.titans.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
+        // Limpiar el contenido existente en los contenedores de dioses y titanes
+        this.clearContainer(this.godsContainer);
+        this.clearContainer(this.titansContainer);
+
+        this.godsText = this.add.text(150, 0, 'Dioses', { fontSize: '24px', color: '#000' });
+        this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
+
+        this.godsContainer.add(this.godsText);
+        this.titansContainer.add(this.titansText);
+
+        // Añadir nuevamente la información de los dioses
+        this.gods.forEach((player, index) => {
+            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura`;
+            const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
+            const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
+            this.godsContainer.add([playerText, playerImage]);
+        });
+
+        // Añadir nuevamente la información de los titanes
+        this.titans.forEach((player, index) => {
+            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura`;
+            const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
+            const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
+            this.titansContainer.add([playerText, playerImage]);
+        });
+
+        //this.godsSection.setText('Dioses\n' + this.gods.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
+        //this.titansSection.setText('Titanes\n' + this.titans.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
+    }
+
+    clearContainer(container) {
+        container.removeAll(true);
     }
 
     rollDice() {
-
         this.updateBoard();
 
         const diceRoll = Math.floor(Math.random() * 6) + 1;
@@ -84,10 +152,16 @@ class MainScene extends Phaser.Scene {
 
         this.messageElement.setText(`${currentPlayer.name} (${currentPlayer.type}) tiró un ${diceRoll} y se movió a la casilla ${currentPlayer.position}.`);
 
-        this.checkForDuel(currentPlayer);
-        this.checkForStore(currentPlayer);
-        this.verifyVictory()
+        // Animar el movimiento del sprite del personaje
+        this.movePlayerSprite(currentPlayer);
 
+        setTimeout(() => {
+            this.checkForDuel(currentPlayer);
+            this.checkForStore(currentPlayer);
+            this.verifyVictory();
+        }, 1000);
+
+    
         if (this.turn === 'god') {
             this.turn = 'titan';
         } else {
@@ -95,6 +169,23 @@ class MainScene extends Phaser.Scene {
         }
 
         this.updateBoard();
+    }
+
+    movePlayerSprite(player) {
+        // Obtener la nueva posición en el tablero
+        const newPosition = this.getBoardPosition(player.position);
+        this.tweens.add({
+            targets: player.sprite,
+            x: newPosition.x,
+            y: newPosition.y,
+            duration: 500,
+            ease: 'Power2'
+        });
+    }
+
+    getBoardPosition(position) {
+        // Convertir la posición de la casilla en coordenadas x, y
+        return this.boardPositions[position - 1]; // Ajustar la posición según el índice del array
     }
 
     checkForDuel(currentPlayer) {
@@ -125,7 +216,6 @@ class MainScene extends Phaser.Scene {
 
     checkForStore(currentPlayer) {
         if (currentPlayer.position === 5) {
-            //this.storeActive = true;
             this.storePlayer = currentPlayer;
             this.scene.pause('MainScene');
             this.scene.run('StoreScene', { storePlayer: this.storePlayer });
@@ -173,9 +263,7 @@ class MainScene extends Phaser.Scene {
 
     loadGame() {
         const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
-        const playSavedGame = JSON.parse(localStorage.getItem('playSavedGame'))
-        console.log(playSavedGame)
-        console.log(savedGameState)
+        const playSavedGame = JSON.parse(localStorage.getItem('playSavedGame'));
         if (playSavedGame && savedGameState) {
             this.gods = savedGameState.gods;
             this.titans = savedGameState.titans;
@@ -191,9 +279,6 @@ class MainScene extends Phaser.Scene {
     verifyVictory() {
         const godsArmorPieces = this.gods.reduce((sum, player) => sum + player.armorPieces, 0);
         const titansArmorPieces = this.titans.reduce((sum, player) => sum + player.armorPieces, 0);
-
-        console.log("Piezas Dioses: " + godsArmorPieces)
-        console.log("Piezas Titanes: " + titansArmorPieces)
 
         const options = JSON.parse(localStorage.options);
         const piecesToWin = options.pieces || 5;

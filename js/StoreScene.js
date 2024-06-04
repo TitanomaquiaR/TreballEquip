@@ -8,6 +8,7 @@ class StoreScene extends Phaser.Scene {
         this.storePlayer = data.storePlayer;
         this.options = JSON.parse(localStorage.options);
         this.armorPrice = this.options.price || 10;
+        this.armorbought = false
     }
 
     create() {
@@ -19,15 +20,17 @@ class StoreScene extends Phaser.Scene {
 
         this.playerGoldText = this.add.text(400, 300, `Tienes ${this.storePlayer.gold} monedas. ¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 
-        const buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
-        buyButton.on('pointerdown', () => this.buyArmorPiece());
+        this.buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.buyButton.on('pointerdown', () => this.buyArmorPiece());
 
         const exitButton = this.add.text(400, 500, 'Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
         exitButton.on('pointerdown', () => this.exitStore());
     }
 
     buyArmorPiece() {
-        if (this.storePlayer.gold >= this.armorPrice) {
+        this.buyButton.setVisible(false)
+        if (this.storePlayer.gold >= this.armorPrice && !this.armorbought) {
+            this.armorbought = true
             this.storePlayer.gold -= this.armorPrice;
             this.storePlayer.armorPieces += 1;
             this.playerGoldText.setText(`Tienes ${this.storePlayer.gold} monedas.`);

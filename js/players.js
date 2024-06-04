@@ -50,12 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('godsPlayers', JSON.stringify(godsPlayers));
         localStorage.setItem('titansPlayers', JSON.stringify(titansPlayers));
 
-        // Redirigir a la página del juego (modifica 'game.html' con la URL real de tu juego)
-
         window.location.href = 'game.html';
     });
 
-    // Asignar el evento onchange a los inputs de número de jugadores
+    
     document.getElementById('num-gods').addEventListener('change', () => createPlayerInputs('gods'));
     document.getElementById('num-titans').addEventListener('change', () => createPlayerInputs('titans'));
 });
