@@ -17,7 +17,7 @@ class MainScene extends Phaser.Scene {
     create() {
         const options = JSON.parse(localStorage.options);
         const initialGold = options.goldini || 0;
-        const armorPrice = options.price || 10;
+        const piecesToWin = options.pieces || 5;
         const godsPlayers = JSON.parse(localStorage.getItem('godsPlayers')) || [];
         const titansPlayers = JSON.parse(localStorage.getItem('titansPlayers')) || [];
 
@@ -44,6 +44,8 @@ class MainScene extends Phaser.Scene {
         // Menú de pausa
         this.pauseMenu = this.add.container(400, 300).setVisible(false);
         this.createPauseMenu();
+
+        this.loadGame()
     }
 
     createBoard() {
@@ -84,6 +86,7 @@ class MainScene extends Phaser.Scene {
 
         this.checkForDuel(currentPlayer);
         this.checkForStore(currentPlayer);
+        this.verifyVictory()
 
         if (this.turn === 'god') {
             this.turn = 'titan';
@@ -170,15 +173,37 @@ class MainScene extends Phaser.Scene {
 
     loadGame() {
         const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
-        if (savedGameState) {
+        const playSavedGame = JSON.parse(localStorage.getItem('playSavedGame'))
+        console.log(playSavedGame)
+        console.log(savedGameState)
+        if (playSavedGame && savedGameState) {
             this.gods = savedGameState.gods;
             this.titans = savedGameState.titans;
             this.currentPlayerIndex = savedGameState.currentPlayerIndex;
             this.turn = savedGameState.turn;
             this.updateBoard();
-            this.messageElement.setText('Partida cargada exitosamente.');
+            console.log('Partida cargada exitosamente.');
         } else {
-            alert('No hay partidas guardadas.');
+            console.log('No hay partidas guardadas.');
+        }
+    }
+
+    verifyVictory() {
+        const godsArmorPieces = this.gods.reduce((sum, player) => sum + player.armorPieces, 0);
+        const titansArmorPieces = this.titans.reduce((sum, player) => sum + player.armorPieces, 0);
+
+        console.log("Piezas Dioses: " + godsArmorPieces)
+        console.log("Piezas Titanes: " + titansArmorPieces)
+
+        const options = JSON.parse(localStorage.options);
+        const piecesToWin = options.pieces || 5;
+
+        if (godsArmorPieces >= piecesToWin) {
+            alert('Gods win!');
+            window.location.href = '../index.html';
+        } else if (titansArmorPieces >= piecesToWin) {
+            alert('Titans win!');
+            window.location.href = '../index.html';
         }
     }
 }
