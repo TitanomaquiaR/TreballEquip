@@ -18,14 +18,13 @@ class DuelScene extends Phaser.Scene {
     }
 
     preload(){
-        this.load.image('duelofondo', '../assets/UI/FondoDuelo.png');
+        this.load.image('duelofondo', '../assets/UI/FondoDuelo.jpg');
     }
 
     create() {
-        this.add.image(0, 0, 'duelofondo').setOrigin(0.5);
+        this.add.image(0, 0, 'duelofondo').setOrigin(0);
         this.resizeBackground();
         window.addEventListener('resize', ()=>this.resizeBackground());
-
         this.add.text(400, 100, 'Duelo', { fontSize: '32px', fontFamily: 'Greconian', fontFamily, color: '#000' }).setOrigin(0.5);
 
         this.duelInfo = this.add.text(400, 150, `¡Duelo entre ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type})!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
@@ -71,6 +70,23 @@ class DuelScene extends Phaser.Scene {
 
         this.dice2 = this.add.text(450, 500, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.dice2.setVisible(false)
+    }
+
+    resizeBackground() {
+        const { width, height } = this.sys.game.canvas;
+        const bgWidth = this.background.width;
+        const bgHeight = this.background.height;
+
+        // Determine scale to fit the image proportionally
+        const scaleX = width / bgWidth;
+        const scaleY = height / bgHeight;
+        const scale = Math.max(scaleX, scaleY);
+
+        // Set the scale and re-position the image to the center
+        this.background.setScale(scale).setScrollFactor(0);
+
+        // Center the background image
+        this.background.setPosition(width / 2, height / 2);
     }
 
     updateBetText(){

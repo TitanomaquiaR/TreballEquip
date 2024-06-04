@@ -16,7 +16,7 @@ class StoreScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(400, 400, 'tiendafondo').setOrigin(0.5);
+        this.add.image(0, 0, 'tiendafondo').setOrigin(0);
         this.resizeBackground();
         window.addEventListener('resize', ()=>this.resizeBackground());
 
@@ -36,14 +36,19 @@ class StoreScene extends Phaser.Scene {
 
     resizeBackground() {
         const { width, height } = this.sys.game.canvas;
-        const scaleX = width / this.background.width;
-        const scaleY = height / this.background.height;
+        const bgWidth = this.background.width;
+        const bgHeight = this.background.height;
+
+        // Determine scale to fit the image proportionally
+        const scaleX = width / bgWidth;
+        const scaleY = height / bgHeight;
         const scale = Math.max(scaleX, scaleY);
 
+        // Set the scale and re-position the image to the center
         this.background.setScale(scale).setScrollFactor(0);
 
-        this.cameras.main.setBounds(0, 0, width, height);
-        this.cameras.main.centerOn(width / 2, height / 2);
+        // Center the background image
+        this.background.setPosition(width / 2, height / 2);
     }
 
     buyArmorPiece() {

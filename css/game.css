@@ -17,12 +17,12 @@
 
 @font-face {
 	font-family: 'Greconian';
-	src: url('../assets/FUENTES/Greconian.ttf');
+	src: url('../assets/FUENTES/Greconian.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Selanik';
-	src: url('../assets/FUENTES/Selanik.ttf')';
+	src: url('../assets/FUENTES/Selanik.ttf') format('truetype');
 }
 
 body {
