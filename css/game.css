@@ -4,42 +4,54 @@
 }
 
 :root{
-	--darkblue: #717790;
-    --blue: #b8cadf;
-    --pink: #e5c6c3;
-    --darkpink: #926464;
+	--darkblue: #2a2f43;
+    --blue: #c2d8f2;
+    --pink: #f6d3d0;
+    --darkpink: #7f4949;
     --green: #b8dbc0;
-    --darkgreen: #556564;
+    --darkgreen: #273634;
     --white: #eee7e2;
 }
 
 @font-face {
 	font-family: 'Greconian';
-	src: url('../assets/FUENTES/greconian/Greconian.ttf');
+	src: url('../assets/FUENTES/Greconian.ttf');
 }
 
 @font-face {
 	font-family: 'Selanik';
-	src: url('../assets/FUENTES/selanik/Salih\ Kizilkaya\ -\ SK\ Selanik\ Rounded\ Regular.ttf Kizilkaya\ -\ SK\ Selanik\ Rounded\ Regular.ttf');
+	src: url('../assets/FUENTES/Salih\ Kizilkaya\ -\ SK\ Selanik\ Rounded\ Regular.ttf')';
 }
 
 body {
-    height: 100vh;
-    width: 100vw;
-    padding: 30px;
-    margin: 0px;
-    overflow: scroll;
+    height: auto;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 0;
+    position: relative;
     font-family: 'Selanik';
     background-color: var(--white);
 }
 
-.app{
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    padding: 20px;
-    gap: 1px;
+body {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
     position: relative;
+    background-color: var(--background);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: hidden;
+    scroll-behavior: smooth;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 0 0;
+    grid-template-areas:
+        "."
+        ".";
 }
 
 .button{
@@ -67,21 +79,163 @@ body {
 
 h1{
     font-family: 'Greconian';
-    font-size: 60px;
+    font-size: 100px;
+}
+
+/*WEB WRAPPER*/
+.app{
+    /*display: flex;
+    flex-direction: column;
+    align-items: left;
+    padding: 20px;
+    gap: 1px;*/
+    position: relative;
+    z-index: 2;
+}
+
+
+/*LANDING*/
+#landing{
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--darkpink);
+    color: var(--pink);
+    z-index: 2;
+    position: relative;
+}
+
+/*
+body {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+    background-color: var(--background);
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: hidden;
+    scroll-behavior: smooth;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr auto;
+    gap: 0 0;
+    grid-template-areas:
+        "."
+        ".";
+}
+
+
+.nav {
+    --menu-primary: var(--white);
+    display: block;
+    width: 100%;
+    height: auto;
+    z-index: 99;
+    background-color: var(--color-light);
+    position: absolute;
+}
+
+    .nav__content {
+        display: -webkit-box;
+        display: -moz-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-direction: row;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -webkit-box-direction: normal;
+        -webkit-box-orient: horizontal;
+        -moz-box-direction: normal;
+        -moz-box-orient: horizontal;
+        -webkit-flex-wrap: nowrap;
+        -ms-flex-wrap: none;
+        flex-wrap: nowrap;
+        -webkit-box-align: center;
+        -moz-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        height: var(--nav-height);
+    }
+}
+.full {
+    width: 100%;
+    padding-left: var(--hpad);
+    padding-right: var(--hpad);
+}
+
+
+.section-footer-container {
+    z-index: 1;
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    overflow: hidden;
+}
+*/
+
+.navigation{
+    display: flex;
+    background-color: var(--darkpink);
+    z-index: 99;
+}
+
+.body-sections{
+    z-index: 1;
+    position: sticky;
+    height: 100vh;
+    width: 100vw;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    font-family: 'Selanik';
+}
+
+/*ABOUT*/
+
+#about{
+    font-family: 'Selanik';
+    font-size: 25px;
+    padding: 50px;
+    height: 100%;
+    background-color: red;
 }
 
 #equipo{
     display: flex;
-    overflow: visible;
+    flex-wrap: wrap;
     justify-content: space-evenly;
+    gap: 18px;
+    font-size: 60px;
+    height: 100%;
+}
+
+/*GAME STYLING*/
+
+/*PLAY*/
+.juego{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 50vh;
+    padding: 50px;
 }
 
 #container{
     display: flex;
-    gap: 8pc;
+    gap: 8px;
 }
-
-/*GAME STYLING*/
 
 #game-container {
     text-align: center;
