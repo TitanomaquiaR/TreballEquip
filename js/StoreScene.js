@@ -20,10 +20,10 @@ class StoreScene extends Phaser.Scene {
 
         this.add.text(400, 100, 'Tienda', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
 
-        this.storeInfo = this.add.text(400, 200, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.storeInfo = this.add.text(400, 150, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
 
-        this.playerGoldText = this.add.text(400, 300, `Tienes ${this.storePlayer.gold} monedas`,  { fontSize: '18px', color: '#000' }).setOrigin(0.5);
-        this.priceInfo = this.add.text(400, 200, `¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.playerGoldText = this.add.text(400, 250, `Tienes ${this.storePlayer.gold} monedas`,  { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.priceInfo = this.add.text(400, 350, `¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 
         this.buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', fontFamily: 'greconian', color: '#000' }).setOrigin(0.5).setInteractive();
         this.buyButton.on('pointerdown', () => this.buyArmorPiece());
