@@ -22,53 +22,73 @@ class DuelScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.image(0, 0, 'duelofondo').setOrigin(0);
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height / 2;
+
+        this.background = this.add.image(0, 0, 'duelofondo').setOrigin(0.5);
         this.resizeBackground();
         window.addEventListener('resize', ()=>this.resizeBackground());
-        this.add.text(400, 100, 'Duelo', { fontSize: '32px', fontFamily: 'Greconian', fontFamily, color: '#000' }).setOrigin(0.5);
 
-        this.duelInfo = this.add.text(400, 150, `¡Duelo entre ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type})!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.add.text(centerX, centerY - 200, 'DUELO', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
 
-        this.betInfoText = this.add.text(400, 200, 'Introduce las monedas a apostar:', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        const posX = this.cameras.main.width / 2;
+        const posY = this.cameras.main.height / 2;
 
-        this.betInfoGold = this.add.text(400, 300, `¡${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) tiene ${this.duelPlayers[0].gold} monedas y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type}) tiene ${this.duelPlayers[1].gold} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        const wrapperWidth = 700;
+        const wrapperHeight = 600;
+        const wrapper = this.add.rectangle(
+            posX, 
+            posY, 
+            wrapperWidth, 
+            wrapperHeight, 
+            0xffffff, 
+            0.8
+        ).setOrigin(0.5);
 
-        this.betText = this.add.text(400, 350, 'Apuesta', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        const textStartY = posY - wrapperHeight / 2 + 50;
+
+        this.duelInfo = this.add.text(posX, textStartY + 50, `¡Duelo entre ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type})!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+
+        this.betInfoText = this.add.text(posX, textStartY + 100, 'Introduce las monedas a apostar:', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+
+        this.betInfoGold = this.add.text(posX, textStartY + 150, `¡${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) tiene ${this.duelPlayers[0].gold} monedas y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type}) tiene ${this.duelPlayers[1].gold} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+
+        this.betText = this.add.text(posX, textStartY + 200, 'Apuesta', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
 
         this.updateBetText()
 
-        this.addBetB = this.add.text(350, 350, '+', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.addBetB = this.add.text(posX - 50, textStartY + 200, '+', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();
         this.addBetB.on('pointerdown', () => this.addBet());
 
-        this.removeBetB = this.add.text(450, 350, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.removeBetB = this.add.text(posX + 50, textStartY + 200, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();
         this.removeBetB.on('pointerdown', () => this.removeBet());
 
-        this.duelButton = this.add.text(400, 400, 'Iniciar Duelo', { fontSize: '18px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.duelButton = this.add.text(posX, textStartY + 250, 'Iniciar Duelo', { fontSize: '18px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5).setInteractive();
         this.duelButton.on('pointerdown', () => this.startDuel());
 
         //Segunda parte del duelo, tirar los dados
 
-        this.infoBattleText = this.add.text(400, 200, 'Tirad los dados:', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.infoBattleText = this.add.text(posX, textStartY + 50, 'Tirad los dados:', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.infoBattleText.setVisible(false)
 
-        this.infoBattleP1 = this.add.text(400, 300, `Dado de ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}): `, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.infoBattleP1 = this.add.text(posX, textStartY + 100, `Dado de ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}): `, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.infoBattleP1.setVisible(false)
 
-        this.buttonDice1 = this.add.text(400, 350, '¡Tirar!', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();;
+        this.buttonDice1 = this.add.text(posX - 50, textStartY + 150, '¡Tirar!', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();;
         this.buttonDice1.on('pointerdown', () => this.throwDice1());
         this.buttonDice1.setVisible(false)
 
-        this.dice1 = this.add.text(450, 350, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.dice1 = this.add.text(posX + 50, textStartY + 150, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.dice1.setVisible(false)
 
-        this.infoBattleP2 = this.add.text(400, 450, `Dado de ${this.duelPlayers[1].name} (${this.duelPlayers[1].type}): `, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.infoBattleP2 = this.add.text(posX, textStartY + 250, `Dado de ${this.duelPlayers[1].name} (${this.duelPlayers[1].type}): `, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.infoBattleP2.setVisible(false)
 
-        this.buttonDice2 = this.add.text(400, 500, '¡Tirar!', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();;
+        this.buttonDice2 = this.add.text(posX- 50, textStartY+ 300, '¡Tirar!', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5).setInteractive();;
         this.buttonDice2.on('pointerdown', () => this.throwDice2());
         this.buttonDice2.setVisible(false)
 
-        this.dice2 = this.add.text(450, 500, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.dice2 = this.add.text(posX + 50, textStartY + 300, '-', { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
         this.dice2.setVisible(false)
     }
 
