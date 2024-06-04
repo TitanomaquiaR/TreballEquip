@@ -13,8 +13,6 @@ class StoreScene extends Phaser.Scene {
 
     preload(){
         this.load.image('tiendafondo', '../assets/UI/fondo.jpg');
-        this.load.image('moneda', './assets/UI/moneda.png');
-        this.load.svg('armadura', '/assets/UI/armadura.svg');
     }
 
     create() {
