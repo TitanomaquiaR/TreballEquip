@@ -14,16 +14,16 @@ class StoreScene extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor('#ffffff');
 
-        this.add.text(400, 100, 'Tienda', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
+        this.add.text(750, 100, 'Tienda', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
 
-        this.storeInfo = this.add.text(400, 200, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.storeInfo = this.add.text(750, 200, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 
-        this.playerGoldText = this.add.text(400, 300, `Tienes ${this.storePlayer.gold} monedas. ¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.playerGoldText = this.add.text(750, 300, `Tienes ${this.storePlayer.gold} monedas. ¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 
-        this.buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.buyButton = this.add.text(750, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
         this.buyButton.on('pointerdown', () => this.buyArmorPiece());
 
-        const exitButton = this.add.text(400, 500, 'Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        const exitButton = this.add.text(750, 500, 'Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
         exitButton.on('pointerdown', () => this.exitStore());
     }
 
