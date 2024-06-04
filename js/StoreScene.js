@@ -11,19 +11,27 @@ class StoreScene extends Phaser.Scene {
         this.armorbought = false
     }
 
+    preload(){
+        this.load.image('tiendafondo', '../assets/UI/fondo.jpg');
+        this.load.image('moneda', './assets/UI/moneda.png');
+        this.load.svg('armadura', '/assets/UI/armadura.svg');
+    }
+
     create() {
-        this.cameras.main.setBackgroundColor('#ffffff');
+        this.add.image(400, 300, 'tiendafondo').setOrigin(0.5);
 
-        this.add.text(400, 100, 'Tienda', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
+        this.add.text(400, 100, 'Tienda', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
 
-        this.storeInfo = this.add.text(400, 200, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.storeInfo = this.add.text(400, 200, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
 
-        this.playerGoldText = this.add.text(400, 300, `Tienes ${this.storePlayer.gold} monedas. ¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.playerGoldText = this.add.text(400, 300, `Tienes ${this.storePlayer.gold} `,  { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.add.image(320, 300, 'moneda').setOrigin(0.5).setScale(0.5);
+        this.priceInfo = this.add.text(400, 200, `¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 
-        this.buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        this.buyButton = this.add.text(400, 400, 'Comprar Pieza de Armadura', { fontSize: '18px', fontFamily: 'greconian', color: '#000' }).setOrigin(0.5).setInteractive();
         this.buyButton.on('pointerdown', () => this.buyArmorPiece());
 
-        const exitButton = this.add.text(400, 500, 'Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        const exitButton = this.add.text(400, 500, 'Salir', { fontSize: '18px',fontFamily: 'greconian', color: '#000' }).setOrigin(0.5).setInteractive();
         exitButton.on('pointerdown', () => this.exitStore());
     }
 
@@ -33,8 +41,8 @@ class StoreScene extends Phaser.Scene {
             this.armorbought = true
             this.storePlayer.gold -= this.armorPrice;
             this.storePlayer.armorPieces += 1;
-            this.playerGoldText.setText(`Tienes ${this.storePlayer.gold} monedas.`);
-            this.storeInfo.setText(`¡Has comprado una pieza de armadura! Ahora tienes ${this.storePlayer.armorPieces} piezas.`);
+            this.playerGoldText.setText(`Tienes ${this.storePlayer.gold} ${this.add.image(320, 300, 'moneda').setOrigin(0.5).setScale(0.5)}`);
+            this.storeInfo.setText(`¡Has comprado una pieza de armadura! Ahora tienes ${this.storePlayer.armorPieces} ${this.add.image(320, 300, 'armadura').setOrigin(0.5).setScale(0.5)}`);
         } else {
             this.storeInfo.setText('No tienes suficientes monedas para comprar una pieza de armadura.');
         }
