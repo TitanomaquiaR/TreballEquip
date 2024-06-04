@@ -36,46 +36,26 @@ body {
     background-color: var(--white);
 }
 
-body {
-    width: 100%;
-    height: auto;
-    min-height: 100vh;
-    margin: 0;
-    position: relative;
-    background-color: var(--background);
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: hidden;
-    scroll-behavior: smooth;
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
-    gap: 0 0;
-    grid-template-areas:
-        "."
-        ".";
-}
-
 .button{
     font-family: 'Greconian';
     width: 100%;
     padding: 8px;
     border-radius: 15px;
-    color: var(--darkblue);
-    background-color: var(--green);
+    color: var(--darkpink);
+    background-color: var(--pink);
     border: none;
     font-size: 35px;
-    box-shadow: 0 6px var(--darkgreen);
+    box-shadow: 0 6px var(--darkpink);
 }
 
-.button::hover{
-    background-color: var(--pink);
+.button:hover{
+    background-color: var(--green);
 }
 
-.button::active{
-    background-color: var(--pink);
-    color: var(--darkpink);
-    box-shadow: 0 0px --white;
+.button:active{
+    background-color: var(--green);
+    color: var(--darkgreen);
+    box-shadow: 0 0px var(--darkgreen);
     transform: translateY(4px);
 }
 
@@ -122,6 +102,7 @@ h1{
 
     padding: 0;
     z-index: 3;
+    font-family: 'Selanik';
 }
 
 
@@ -173,6 +154,7 @@ h1{
 #about{
     z-index: 2;
 
+    margin-top: 300px;
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
@@ -208,6 +190,7 @@ h1{
     padding: 20px;
     gap: 20px;
     width: 100%;
+    margin-bottom: 40px;
 }
 
 #juego-container{
@@ -246,10 +229,16 @@ h1{
 }
 
 #container-players{
+    padding: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 50px;
+    gap: 300px;
+    margin-bottom: 200px;
+}
+
+.player-container{
+    
 }
 
 #gods, #titans{
@@ -257,6 +246,62 @@ h1{
     flex-direction: column;
 }
 
+#inputs{
+	font-size: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+input[type="number"]{
+	width: 25%;
+}
+
+#play-button{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+#play{
+    width: 50%;
+}
+
+footer{
+    font-size: 15px;
+    padding: 5px;
+    bottom: 0;
+    position: absolute;
+}
+
+/*OPTIONS*/
+.options{
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    
+
+    font-family: 'Selanik';
+    font-size: 25px;
+
+    padding: 60px;
+    height: 100vh;
+    text-align: justify;
+}
+
+#options-sections{
+    display: flex;
+    align-content: space-between;
+}
+
+.buttons-options{
+
+}
+
+input[type="number"]{
+	width: 25%;
+}
 
 /*GAME STYLING*/
 #game-container {

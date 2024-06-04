@@ -3,33 +3,33 @@
 <head>
     <script src="../library/jquery.min.js"></script>
     <script src="../js/options.js" type="module"></script>
-    <title> Memory - Opcions </title>
+    <title> Opcions </title>
     <link rel="stylesheet" href="../css/game.css">
 </head>
 <body>
-    <div id="container">
-        <div id="options">
+    <div class="app">
+        <div class="options">
             <h1>Opcions</h1>
-            <ul>
-                <li>
-                    <label for="pieces">P. Armaduras para ganar </label>
-                    <input type="number" id="pieces" min="2" max="6">
-                </li>
-                <li>
-                    <label for="goldini">Monedas iniciales</label>
-                    <input type="number" id="goldini" min="5" max="20">
-                </li>
-                <li>
-                    <label for="price">Precio p. Armadura </label>
-                    <input type="number" id="price" min="3" max="6">
-                </li>
-                <li>
-                    <div class="button-container">
+                    <div id="options-sections">
+                        <div id="armadura">
+                            <label for="pieces">P. Armaduras para ganar </label>
+                            <input type="number" id="pieces" min="2" max="6">
+                        </div>
+    
+                        <div id="monedas">
+                            <label for="goldini">Monedas iniciales</label>
+                            <input type="number" id="goldini" min="5" max="20">
+                        </div>
+    
+                        <div id="precio">
+                            <label for="price">Precio p. Armadura </label>
+                            <input type="number" id="price" min="3" max="6">
+                        </div>
+                    </div>
+                    <div class="buttons-options">
                         <button id="default">Per defecte</button>
                         <button id="apply">Aplicar</button>
                     </div>
-                </li>
-            </ul>
         </div>
     </div>
 
