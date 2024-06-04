@@ -31,10 +31,10 @@ class MainScene extends Phaser.Scene {
         const titansPlayers = JSON.parse(localStorage.getItem('titansPlayers')) || [];
         
         godsPlayers.forEach(player => {
-            this.load.image(player.name, `../assets/Personajes/${player.type}.png`);
+            this.load.image(player.name, `../assets/Personajes/${player.type}.PNG`);
         });
         titansPlayers.forEach(player => {
-            this.load.image(player.name, `../assets/Personajes/${player.type}.png`);
+            this.load.image(player.name, `../assets/Personajes/${player.type}.PNG`);
         });
 
         this.load.image('board', '../assets/board.jpg');
@@ -71,7 +71,7 @@ class MainScene extends Phaser.Scene {
         this.pauseButton.setInteractive();
         this.pauseButton.on('pointerdown', () => this.pauseGame());
 
-        this.pauseMenu = this.add.container(400, 300).setVisible(false);
+        this.pauseMenu = this.add.container(750, 300).setVisible(false);
         this.createPauseMenu();
 
         this.loadGame();
