@@ -365,7 +365,7 @@ class MainScene extends Phaser.Scene {
 
         hitAreaS.on('pointerdown', () => {
             this.saveGame();
-            window.location.href = '../index.html';
+            window.location.href = '../html/inicio.html';
         });
 
         hitAreaS.on('pointerover', () => {
@@ -385,7 +385,7 @@ class MainScene extends Phaser.Scene {
         });
 
         hitAreaNS.on('pointerdown', () => {
-            window.location.href = '../index.html';
+            window.location.href = '../html/inicio.html';
         });
 
         hitAreaNS.on('pointerover', () => {
