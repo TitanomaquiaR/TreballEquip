@@ -70,6 +70,44 @@ a{
     color: var(--pink);
 }
 
+
+/*LOGO*/
+.laurel-group {
+    transition: transform 0.5s;
+    transform-origin: bottom center;
+}
+
+.logo:hover .left-laurel {
+    animation: left-rotate 5s infinite;
+}
+
+.logo:hover .right-laurel {
+    animation: right-rotate 5s infinite;
+}
+
+@keyframes left-rotate {
+    0% { transform: rotate(-9deg); }
+    50% { transform: rotate(5.5deg); }
+    100% { transform: rotate(-9deg); }
+}
+
+@keyframes right-rotate {
+    0% { transform: rotate(9deg); }
+    50% { transform: rotate(-4deg); }
+    100% { transform: rotate(9deg); }
+}
+
+.logo-wrapper{
+    height: 200px;
+    width: 200x;
+    background-color: red;
+}
+
+.logo{
+    width: 100%;
+    height: 100%;
+}
+
 /*NAV BAR*/
 .nav{
     position: fixed;
@@ -91,10 +129,6 @@ a{
     font-size: 20px;
     font-family: 'Greconian';
     justify-content: center;
-}
-
-.logo{
-
 }
 
 
