@@ -38,6 +38,8 @@ class MainScene extends Phaser.Scene {
         });
 
         this.load.image('board', '../assets/board.jpg');
+        this.load.bitmapFont('greconian', '../assets/FUENTES/Greconian.tff');
+        this.load.bitmapFont('selanik', '../assets/FUENTES/Selanik.tff');
     }
 
     create() {
@@ -151,8 +153,8 @@ class MainScene extends Phaser.Scene {
         this.godsContainer = godsContainer
         this.titansContainer = this.add.container(1075, 50);
 
-        this.godsText = this.add.text(150, 0, 'Dioses', { fontSize: '24px', color: '#000' });
-        this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
+        this.godsText = this.add.text(150, 0, 'Dioses', { fontFamily: 'greconian', fontSize: '24px', color: '#000' });
+        this.titansText = this.add.text(150, 0, 'Titanes', { fontFamily: 'greconian', fontSize: '24px', color: '#000' });
 
         this.godsContainer.add(this.godsText);
         this.titansContainer.add(this.titansText);
@@ -161,30 +163,36 @@ class MainScene extends Phaser.Scene {
     }
 
     updateBoard() {
-        // Limpiar todo 
+        // Limpiar los contenidores
         this.clearContainer(this.godsContainer);
         this.clearContainer(this.titansContainer);
     
-        //Añadir información entera
+        //Actualizar
+        const totalArmorPiecesGods = this.calculateTotalArmorPieces(this.gods);
         this.godsText = this.add.text(150, 0, 'Dioses', { fontSize: '24px', color: '#000' });
-        this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
-    
-        this.godsContainer.add(this.godsText);
-        this.titansContainer.add(this.titansText);
-    
+        this.totalArmorTextGods = this.add.text(150, 32, `Total de Piezas: ${totalArmorPiecesGods}`, { fontSize: '16px', color: '#000' });
+        this.godsContainer.add([this.godsText, this.totalArmorTextGods]);
         this.gods.forEach((player, index) => {
             const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura\nCasilla Actual: ${player.position}`;
-            const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
-            const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
+            const playerText = this.add.text(60, 70 + index * 120, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
+            const playerImage = this.add.image(10, 70 + index * 120 + 10, player.name).setScale(0.05);
             this.godsContainer.add([playerText, playerImage]);
         });
     
+        const totalArmorPiecesTitans = this.calculateTotalArmorPieces(this.titans);
+        this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
+        this.totalArmorTextTitans = this.add.text(150, 32, `Total de Piezas: ${totalArmorPiecesTitans}`, { fontSize: '16px', color: '#000' });
+        this.titansContainer.add([this.titansText, this.totalArmorTextTitans]);
         this.titans.forEach((player, index) => {
             const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura\nCasilla Actual: ${player.position}`;
-            const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
-            const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
+            const playerText = this.add.text(60, 70 + index * 120, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
+            const playerImage = this.add.image(10, 70 + index * 120 + 10, player.name).setScale(0.05);
             this.titansContainer.add([playerText, playerImage]);
         });
+    }
+    
+    calculateTotalArmorPieces(players) {
+        return players.reduce((total, player) => total + player.armorPieces, 0);
     }
 
     clearContainer(container) {
