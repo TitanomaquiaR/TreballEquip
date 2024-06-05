@@ -12,16 +12,16 @@ class MainScene extends Phaser.Scene {
         this.storePlayer = null;
         this.duelActive = false;
         this.boardPositions = [
-            { x: 700, y: 475 },
-            { x: 600, y: 410 },
-            { x: 550, y: 300 },
-            { x: 575, y: 180 },
-            { x: 700, y: 100 },
-            { x: 825, y: 100 },
-            { x: 925, y: 180 },
-            { x: 950, y: 300 },
-            { x: 900, y: 410 },
-            { x: 800, y: 475 }
+            { x: 700, y: 475 }, 
+            { x: 600, y: 420 }, 
+            { x: 560, y: 310 }, 
+            { x: 590, y: 190 }, 
+            { x: 700, y: 125 }, 
+            { x: 810, y: 125 }, 
+            { x: 910, y: 200 }, 
+            { x: 942, y: 313 }, 
+            { x: 900, y: 420 }, 
+            { x: 800, y: 475 } 
         ];
     }
 
@@ -38,8 +38,6 @@ class MainScene extends Phaser.Scene {
         });
 
         this.load.image('board', '../assets/tablero.png');
-        this.load.bitmapFont('greconian', '../assets/FUENTES/Greconian.tff');
-        this.load.bitmapFont('selanik', '../assets/FUENTES/Selanik.tff');
     }
 
     create() {
@@ -54,7 +52,7 @@ class MainScene extends Phaser.Scene {
         const board = this.add.image(750, 315, 'board').setScale(0.5);
 
         //Mensaje de movimiento
-        this.messageElement = this.add.text(10, 780, '', { fill: '#eee7e2' });
+        this.messageElement = this.add.text(10, 780, '', { fill: '#7F4949' });
 
         //Verificar partida guardada + cargar fichas
         const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));

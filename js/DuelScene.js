@@ -47,7 +47,7 @@ class DuelScene extends Phaser.Scene {
         //Botones y textos
         const textStartY = posY - wrapperHeight / 2 + 50;
 
-        this.add.text(posX, textStartY, 'DUELO', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
+        this.add.text(posX, textStartY, 'DUELO', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
 
         this.duelInfo = this.add.text(posX, textStartY + 50, `¡Duelo entre ${this.duelPlayers[0].name} (${this.duelPlayers[0].type}) y ${this.duelPlayers[1].name} (${this.duelPlayers[1].type})!`, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
 

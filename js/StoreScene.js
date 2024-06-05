@@ -37,12 +37,12 @@ class StoreScene extends Phaser.Scene {
         //Botones y texto
         const textStartY = posY - wrapperHeight / 2 + 50;
 
-        this.add.text(posX, textStartY, 'TIENDA', { fontSize: '32px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
+        this.add.text(posX, textStartY, 'TIENDA', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
 
-        this.storeInfo = this.add.text(posX, textStartY + 50, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.storeInfo = this.add.text(posX, textStartY + 50, `Bienvenido a la tienda, ${this.storePlayer.name}!`, { fontSize: '18px',  color: '#000' }).setOrigin(0.5);
 
-        this.playerGoldText = this.add.text(posX, textStartY + 130, `Tienes ${this.storePlayer.gold} monedas`,  { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
-        this.priceInfo = this.add.text(posX, textStartY + 180, `¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px', fontFamily: 'Selanik', color: '#000' }).setOrigin(0.5);
+        this.playerGoldText = this.add.text(posX, textStartY + 130, `Tienes ${this.storePlayer.gold} monedas`,  { fontSize: '18px',  color: '#000' }).setOrigin(0.5);
+        this.priceInfo = this.add.text(posX, textStartY + 180, `¡Comprar una pieza son ${this.armorPrice} monedas!`, { fontSize: '18px',  color: '#000' }).setOrigin(0.5);
 
         const buttonBackgroundA = this.add.graphics();
         buttonBackgroundA.fillStyle(0x7f4949, 1); 
@@ -50,7 +50,7 @@ class StoreScene extends Phaser.Scene {
         buttonBackgroundA.fillStyle(0xf6d3d0, 1); 
         buttonBackgroundA.fillRoundedRect(0, 0, 300, 50, 10);
 
-        const buyButtonText = this.add.text(150, 25, 'Comprar Pieza de Armadura', { fontSize: '18px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
+        const buyButtonText = this.add.text(150, 25, 'Comprar Pieza de Armadura', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
         this.buyButton = this.add.container(posX - 150, textStartY + 225, [buttonBackgroundA, buyButtonText]);
         const hitAreaB = this.add.zone(0, 0, 300, 50).setOrigin(0, 0).setInteractive();
         this.buyButton.add(hitAreaB)
@@ -78,7 +78,7 @@ class StoreScene extends Phaser.Scene {
         buttonBackgroundE.fillStyle(0xf6d3d0, 1); 
         buttonBackgroundE.fillRoundedRect(0, 0, 150, 50, 10);
 
-        const exitButtonText = this.add.text(75, 25, 'Salir', { fontSize: '18px', fontFamily: 'Greconian', color: '#000' }).setOrigin(0.5);
+        const exitButtonText = this.add.text(75, 25, 'Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
         this.exitButton = this.add.container(posX - 75, textStartY + 300, [buttonBackgroundE, exitButtonText]);
         const hitAreaE = this.add.zone(0, 0, 150, 50).setOrigin(0, 0).setInteractive();
         this.exitButton.add(hitAreaE)
@@ -122,7 +122,7 @@ class StoreScene extends Phaser.Scene {
             this.storePlayer.gold -= this.armorPrice;
             this.storePlayer.armorPieces += 1;
             this.playerGoldText.setText(`Tienes ${this.storePlayer.gold} monedas`);
-            this.storeInfo.setText(`¡Has comprado una pieza de armadura! Ahora tienes ${this.storePlayer.armorPieces} piezas de armadura.`);
+            this.storeInfo.setText(`¡Has comprado una pieza de armadura! \n\n\n Ahora tienes ${this.storePlayer.armorPieces} piezas de armadura.`);
         }
 
         setTimeout(() => {
