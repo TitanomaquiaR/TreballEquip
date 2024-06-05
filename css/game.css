@@ -359,37 +359,6 @@ select-items, select-selected {
 }
 
 
-/*.buttons-options{
-    display: flex;
-    gap:60px;
-    padding: 40px;
-    justify-content: center;
-}
-
-#armadura, #monedas, #precio{
-    width: 70%;
-    display: flex;
-	flex-wrap: wrap;
-	justify-content: space-between;
-}
-
-
-#pieces, #goldini, #price{
-    width: 15%;
-    height: 100%;
-    text-align: center;
-    font-family: 'Greconian';
-    font-size: 40px;
-    border: none;
-    background-color: transparent;
-}
-
-
-#pieces:focus, #goldini:focus, #price:focus{
-    background-color: var(--blue);
-}*/
-
-
 #play-button{
     display: flex;
     align-content: center;
@@ -416,6 +385,12 @@ footer{
 }
 
 /*OPTIONS*/
+
+.warning{
+    font-size: 20px;
+    text-align: center;
+}
+
 .options-wrapper{
     width: 100vw;
     display: flex;
