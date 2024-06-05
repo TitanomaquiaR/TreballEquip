@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
         var titansPlayers = [];
 
         document.querySelectorAll('#gods-players-container div').forEach(function(playerDiv) {
+            
             var name = playerDiv.querySelector('input').value;
             var type = playerDiv.querySelector('select').value;
             godsPlayers.push({ name: name, type: type });
