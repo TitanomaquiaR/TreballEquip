@@ -37,7 +37,7 @@ class MainScene extends Phaser.Scene {
             this.load.image(player.name, `../assets/Personajes/${player.type}.PNG`);
         });
 
-        this.load.image('board', '../assets/UI/TABLERO.png');
+        this.load.image('board', '../assets/tablero.png');
         this.load.bitmapFont('greconian', '../assets/FUENTES/Greconian.tff');
         this.load.bitmapFont('selanik', '../assets/FUENTES/Selanik.tff');
     }
@@ -51,10 +51,10 @@ class MainScene extends Phaser.Scene {
         const titansPlayers = JSON.parse(localStorage.getItem('titansPlayers')) || [];
 
         // Añadir el tablero
-        const board = this.add.image(750, 300, 'board').setScale(0.5);
+        const board = this.add.image(750, 315, 'board').setScale(0.5);
 
         //Mensaje de movimiento
-        this.messageElement = this.add.text(10, 780, '', { fill: '#000000' });
+        this.messageElement = this.add.text(10, 780, '', { fill: '#eee7e2' });
 
         //Verificar partida guardada + cargar fichas
         const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
