@@ -17,12 +17,12 @@
 
 @font-face {
 	font-family: 'Greconian';
-	src: url('../assets/FUENTES/Greconian.ttf');
+	src: url('../assets/FUENTES/Greconian.ttf') format('truetype');
 }
 
 @font-face {
 	font-family: 'Selanik';
-	src: url('../assets/FUENTES/Salih\ Kizilkaya\ -\ SK\ Selanik\ Rounded\ Regular.ttf')';
+	src: url('../assets/FUENTES/Selanik.ttf') format('truetype');
 }
 
 body {
@@ -70,6 +70,47 @@ a{
     color: var(--pink);
 }
 
+
+/*LOGO*/
+.laurel-group {
+    transition: transform 0.5s;
+    transform-origin: bottom center;
+}
+
+.logo:hover .left-laurel {
+    animation: left-rotate 5s infinite;
+}
+
+.logo:hover .right-laurel {
+    animation: right-rotate 5s infinite;
+}
+
+@keyframes left-rotate {
+    0% { transform: rotate(-9deg) scale(0.25, 0.25) translate(-130px, -185px); }
+    50% { transform: rotate(3deg) scale(0.25, 0.25) translate(-130px, -185px); }
+    100% { transform: rotate(-9deg) scale(0.25, 0.25) translate(-130px, -185px); }
+}
+
+@keyframes right-rotate {
+    0% { transform: rotate(9deg) scale(0.25, 0.25) translate(-90px, -185px); }
+    50% { transform: rotate(-3deg) scale(0.25, 0.25) translate(-90px, -185px); }
+    100% { transform: rotate(9deg) scale(0.25, 0.25) translate(-90px, -185px); }
+}
+
+.logo-wrapper{
+    height: 50px;
+    width: 70px;
+    background-color: rgba(255, 0, 0, 0);
+    position:absolute;
+    top: 8px;
+    left: 17px;
+}
+
+.logo{
+    width: 100%;
+    height: 100%;
+}
+
 /*NAV BAR*/
 .nav{
     position: fixed;
@@ -91,10 +132,6 @@ a{
     font-size: 20px;
     font-family: 'Greconian';
     justify-content: center;
-}
-
-.logo{
-
 }
 
 
