@@ -11,7 +11,6 @@ class MainScene extends Phaser.Scene {
         this.duelPlayers = [];
         this.storePlayer = null;
         this.duelActive = false;
-        this.storeActive = false;
         this.boardPositions = [
             { x: 700, y: 475 },
             { x: 600, y: 410 },
@@ -42,7 +41,7 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
-
+        //Cargar opciones
         const options = JSON.parse(localStorage.options);
         const initialGold = options.goldini || 0;
         const piecesToWin = options.pieces || 5;
@@ -52,19 +51,38 @@ class MainScene extends Phaser.Scene {
         // Añadir el tablero
         const board = this.add.image(750, 300, 'board').setScale(0.5);
 
-        this.messageElement = this.add.text(50, 50, '', { fill: '#ffffff' });
+        //Mensaje de movimiento
+        this.messageElement = this.add.text(10, 780, '', { fill: '#000000' });
 
-        this.gods = godsPlayers.map(player => ({
-            ...player, position: 1, gold: initialGold, armorPieces: 0,
-            sprite: this.add.sprite(700, 475, player.name).setScale(0.05) // Inicializar sprite en la posición de la casilla 1
-        }));
-        this.titans = titansPlayers.map(player => ({
-            ...player, position: 1, gold: initialGold, armorPieces: 0,
-            sprite: this.add.sprite(700, 475, player.name).setScale(0.05) // Inicializar sprite en la posición de la casilla 1
-        }));
+        //Verificar partida guardada + cargar fichas
+        const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
+        const playSavedGame = JSON.parse(localStorage.getItem('playSavedGame'));
+
+        if (playSavedGame) {
+            this.gods = savedGameState.gods.map(player => ({
+                ...player,
+                sprite: this.add.sprite(this.getBoardPosition(player.position).x, this.getBoardPosition(player.position).y, player.name).setScale(0.05)
+            }));
+            this.titans = savedGameState.titans.map(player => ({
+                ...player,
+                sprite: this.add.sprite(this.getBoardPosition(player.position).x, this.getBoardPosition(player.position).y, player.name).setScale(0.05)
+            }));
+            this.currentPlayerIndex = savedGameState.currentPlayerIndex;
+            this.turn = savedGameState.turn;
+        } else {
+            this.gods = godsPlayers.map(player => ({
+                ...player, position: 1, gold: initialGold, armorPieces: 0,
+                sprite: this.add.sprite(this.getBoardPosition(1).x, this.getBoardPosition(1).y, player.name).setScale(0.05)
+            }));
+            this.titans = titansPlayers.map(player => ({
+                ...player, position: 1, gold: initialGold, armorPieces: 0,
+                sprite: this.add.sprite(this.getBoardPosition(1).x, this.getBoardPosition(1).y, player.name).setScale(0.05)
+            }));
+        }
 
         this.createBoard();
 
+        //Botones
         const buttonBackground1 = this.add.graphics();
 
         buttonBackground1.fillStyle(0x7f4949, 1); 
@@ -122,10 +140,6 @@ class MainScene extends Phaser.Scene {
             buttonBackground2.fillRoundedRect(0, 0, 200, 50, 10);
         });
 
-        //this.pauseButton = this.add.text(750, 700, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
-        //this.pauseButton.setInteractive();
-        //this.pauseButton.on('pointerdown', () => this.pauseGame());
-
         this.pauseMenu = this.add.container(750, 300).setVisible(false);
         this.createPauseMenu();
 
@@ -143,33 +157,30 @@ class MainScene extends Phaser.Scene {
         this.godsContainer.add(this.godsText);
         this.titansContainer.add(this.titansText);
 
-        //this.godsSection = this.add.text(50, 100, 'Dioses', { fontSize: '24px', color: '#000' });
-        //this.titansSection = this.add.text(750, 100, 'Titanes', { fontSize: '24px', color: '#000' });
         this.updateBoard();
     }
 
     updateBoard() {
-        // Limpiar el contenido existente en los contenedores de dioses y titanes
+        // Limpiar todo 
         this.clearContainer(this.godsContainer);
         this.clearContainer(this.titansContainer);
-
+    
+        //Añadir información entera
         this.godsText = this.add.text(150, 0, 'Dioses', { fontSize: '24px', color: '#000' });
         this.titansText = this.add.text(150, 0, 'Titanes', { fontSize: '24px', color: '#000' });
-
+    
         this.godsContainer.add(this.godsText);
         this.titansContainer.add(this.titansText);
-
-        // Añadir nuevamente la información de los dioses
+    
         this.gods.forEach((player, index) => {
-            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura`;
+            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura\nCasilla Actual: ${player.position}`;
             const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
             const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
             this.godsContainer.add([playerText, playerImage]);
         });
-
-        // Añadir nuevamente la información de los titanes
+    
         this.titans.forEach((player, index) => {
-            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura`;
+            const playerInfo = `${player.name} (${player.type}):\n${player.gold} Monedas / ${player.armorPieces} Piezas de Armadura\nCasilla Actual: ${player.position}`;
             const playerText = this.add.text(60, 70 + index * 100, playerInfo, { fontSize: '16px', color: '#000', wordWrap: { width: 450 } });
             const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
             this.titansContainer.add([playerText, playerImage]);
@@ -181,6 +192,7 @@ class MainScene extends Phaser.Scene {
     }
 
     rollDice() {
+        //Tirar dado
         if(this.turnvalid){
             this.turnvalid = false
             this.updateBoard();
@@ -244,13 +256,14 @@ class MainScene extends Phaser.Scene {
     }
 
     checkForDuel(currentPlayer) {
+        //Verificar Duelo
         const godAt2 = this.gods.find(player => player.position === 2);
         const godAt7 = this.gods.find(player => player.position === 7);
         const titanAt2 = this.titans.find(player => player.position === 2);
         const titanAt7 = this.titans.find(player => player.position === 7);
 
         if (this.turn === 'god') { // Aquí verifica si el jugador actual es dios
-            if ((currentPlayer.position === 2 && (titanAt2 || titanAt7)) || (currentPlayer.position === 7 && (titanAt2 || titanAt7))) {
+            if ((currentPlayer.position === 2 && (titanAt2 || titanAt7)) || (currentPlayer.position === 7 && (titanAt2 || titanAt7))) { //Si el dios está en 2 o / y si hay un titán en 2 o 7
                 this.duelPlayers.push(currentPlayer);
                 this.duelPlayers.push(titanAt2 || titanAt7);
                 this.startDuel();
@@ -264,12 +277,12 @@ class MainScene extends Phaser.Scene {
         }
     }
 
-    startDuel() {
+    startDuel() { //Empezar duelo
         this.scene.pause('MainScene');
         this.scene.run('DuelScene', { duelPlayers: this.duelPlayers });
     }
 
-    checkForStore(currentPlayer) {
+    checkForStore(currentPlayer) { //Verificar Tienda
         if (currentPlayer.position === 5) {
             this.storePlayer = currentPlayer;
             this.scene.pause('MainScene');
@@ -277,13 +290,14 @@ class MainScene extends Phaser.Scene {
         }
     }
 
-    pauseGame() {
+    pauseGame() { //Menú de pausa
         this.pauseMenu.setVisible(true);
         this.turnvalid = false
         this.rollDiceButton.disableInteractive();
     }
 
-    createPauseMenu() {
+    createPauseMenu() { //Crear menú
+        //Botones
         const buttonBContinue = this.add.graphics();
         buttonBContinue.fillStyle(0x7f4949, 1); 
         buttonBContinue.fillRoundedRect(0, 6, 200, 30, 10);
@@ -385,10 +399,16 @@ class MainScene extends Phaser.Scene {
         this.pauseMenu.add([background, continueButton, saveButton, exitButton]);
     }
 
-    saveGame() {
+    saveGame() { //Guardar Partida
         const gameState = {
-            gods: this.gods,
-            titans: this.titans,
+            gods: this.gods.map(player => ({
+                ...player,
+                spritePosition: { x: player.sprite.x, y: player.sprite.y }
+            })),
+            titans: this.titans.map(player => ({
+                ...player,
+                spritePosition: { x: player.sprite.x, y: player.sprite.y }
+            })),
             currentPlayerIndex: this.currentPlayerIndex,
             turn: this.turn
         };
@@ -396,12 +416,10 @@ class MainScene extends Phaser.Scene {
         alert('Partida guardada exitosamente.');
     }
 
-    loadGame() {
+    loadGame() { //Cargar partida
         const savedGameState = JSON.parse(localStorage.getItem('savedGameState'));
         const playSavedGame = JSON.parse(localStorage.getItem('playSavedGame'));
         if (playSavedGame && savedGameState) {
-            this.gods = savedGameState.gods;
-            this.titans = savedGameState.titans;
             this.currentPlayerIndex = savedGameState.currentPlayerIndex;
             this.turn = savedGameState.turn;
             this.updateBoard();
@@ -411,7 +429,7 @@ class MainScene extends Phaser.Scene {
         }
     }
 
-    verifyVictory() {
+    verifyVictory() { //Verificar la victoria
         const godsArmorPieces = this.gods.reduce((sum, player) => sum + player.armorPieces, 0);
         const titansArmorPieces = this.titans.reduce((sum, player) => sum + player.armorPieces, 0);
 
@@ -419,10 +437,10 @@ class MainScene extends Phaser.Scene {
         const piecesToWin = options.pieces || 5;
 
         if (godsArmorPieces >= piecesToWin) {
-            alert('Gods win!');
+            alert('¡Victoria de los Dioses!');
             window.location.href = '../index.html';
         } else if (titansArmorPieces >= piecesToWin) {
-            alert('Titans win!');
+            alert('Victoria de los Titanes!');
             window.location.href = '../index.html';
         }
     }
