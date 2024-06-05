@@ -37,7 +37,7 @@ class MainScene extends Phaser.Scene {
             this.load.image(player.name, `../assets/Personajes/${player.type}.PNG`);
         });
 
-        this.load.image('board', '../assets/board.jpg');
+        this.load.image('board', '../assets/UI/TABLERO.png');
         this.load.bitmapFont('greconian', '../assets/FUENTES/Greconian.tff');
         this.load.bitmapFont('selanik', '../assets/FUENTES/Selanik.tff');
     }
