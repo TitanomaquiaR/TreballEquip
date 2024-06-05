@@ -18,6 +18,10 @@ class DuelScene extends Phaser.Scene {
     }
 
     create() {
+        const buttonBackground = this.add.graphics();
+        buttonBackground.fillStyle(0xaaaaaa, 1); // Color de fondo y opacidad
+        buttonBackground.fillRoundedRect(0, 0, 150, 50, 10);
+
         this.cameras.main.setBackgroundColor('#ffffff');
 
         this.add.text(750, 100, 'Duelo', { fontSize: '32px', color: '#000' }).setOrigin(0.5);
@@ -59,7 +63,10 @@ class DuelScene extends Phaser.Scene {
         this.infoBattleP2 = this.add.text(750, 450, `Dado de ${this.duelPlayers[1].name} (${this.duelPlayers[1].type}): `, { fontSize: '18px', color: '#000' }).setOrigin(0.5);
         this.infoBattleP2.setVisible(false)
 
-        this.buttonDice2 = this.add.text(750, 500, '¡Tirar!', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();;
+        const buttonText = this.add.text(75, 25, '¡Tirar!', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.buttonDice2 = this.add.container(750, 500, [buttonBackground, buttonText]).setSize(150, 50).setInteractive();
+
+        //this.buttonDice2 = this.add.text(750, 500, '¡Tirar!', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();;
         this.buttonDice2.on('pointerdown', () => this.throwDice2());
         this.buttonDice2.setVisible(false)
 

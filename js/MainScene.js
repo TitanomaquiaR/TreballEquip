@@ -7,6 +7,7 @@ class MainScene extends Phaser.Scene {
         this.boardSize = 10;
         this.currentPlayerIndex = 0;
         this.turn = 'god'; // Alterna entre 'god' y 'titan'
+        this.turnvalid = true
         this.duelPlayers = [];
         this.storePlayer = null;
         this.duelActive = false;
@@ -41,6 +42,7 @@ class MainScene extends Phaser.Scene {
     }
 
     create() {
+
         const options = JSON.parse(localStorage.options);
         const initialGold = options.goldini || 0;
         const piecesToWin = options.pieces || 5;
@@ -63,13 +65,66 @@ class MainScene extends Phaser.Scene {
 
         this.createBoard();
 
-        this.rollDiceButton = this.add.text(750, 650, 'Tirar Dado', { fontSize: '22px', color: '#000' }).setOrigin(0.5);
-        this.rollDiceButton.setInteractive();
-        this.rollDiceButton.on('pointerdown', () => this.rollDice());
+        const buttonBackground1 = this.add.graphics();
 
-        this.pauseButton = this.add.text(750, 700, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
-        this.pauseButton.setInteractive();
-        this.pauseButton.on('pointerdown', () => this.pauseGame());
+        buttonBackground1.fillStyle(0x7f4949, 1); 
+        buttonBackground1.fillRoundedRect(0, 6, 200, 50, 10);
+        buttonBackground1.fillStyle(0xf6d3d0, 1); 
+        buttonBackground1.fillRoundedRect(0, 0, 200, 50, 10);
+
+        const buttonTextRD = this.add.text(100, 25, 'Tirar Dado', { fontSize: '22px', color: '#000' }).setOrigin(0.5);
+        this.rollDiceButton = this.add.container(650, 600, [buttonBackground1, buttonTextRD]);
+        const hitAreaRD = this.add.zone(0, 0, 200, 50).setOrigin(0, 0).setInteractive();
+        this.rollDiceButton.add(hitAreaRD);
+        hitAreaRD.on('pointerdown', () => this.rollDice());
+
+        hitAreaRD.on('pointerover', () => {
+            buttonBackground1.clear();
+            buttonBackground1.fillStyle(0x7f4949, 1); 
+            buttonBackground1.fillRoundedRect(0, 6, 200, 50, 10);
+            buttonBackground1.fillStyle(0xb8dbc0, 1); 
+            buttonBackground1.fillRoundedRect(0, 0, 200, 50, 10);
+        });
+        
+        hitAreaRD.on('pointerout', () => {
+            buttonBackground1.clear();
+            buttonBackground1.fillStyle(0x7f4949, 1); 
+            buttonBackground1.fillRoundedRect(0, 6, 200, 50, 10);
+            buttonBackground1.fillStyle(0xf6d3d0, 1); 
+            buttonBackground1.fillRoundedRect(0, 0, 200, 50, 10);
+        });
+
+        const buttonBackground2 = this.add.graphics();
+        buttonBackground2.fillStyle(0x7f4949, 1); 
+        buttonBackground2.fillRoundedRect(0, 6, 200, 50, 10);
+        buttonBackground2.fillStyle(0xf6d3d0, 1); 
+        buttonBackground2.fillRoundedRect(0, 0, 200, 50, 10);
+
+        const buttonTextP = this.add.text(100, 25, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        this.pauseButton = this.add.container(650, 675, [buttonBackground2, buttonTextP]);
+        const hitAreaP = this.add.zone(0, 0, 200, 50).setOrigin(0, 0).setInteractive();
+        this.pauseButton.add(hitAreaP)
+        hitAreaP.on('pointerdown', () => this.pauseGame());
+
+        hitAreaP.on('pointerover', () => {
+            buttonBackground2.clear();
+            buttonBackground2.fillStyle(0x7f4949, 1); 
+            buttonBackground2.fillRoundedRect(0, 6, 200, 50, 10);
+            buttonBackground2.fillStyle(0xb8dbc0, 1); 
+            buttonBackground2.fillRoundedRect(0, 0, 200, 50, 10);
+        });
+        
+        hitAreaP.on('pointerout', () => {
+            buttonBackground2.clear();
+            buttonBackground2.fillStyle(0x7f4949, 1); 
+            buttonBackground2.fillRoundedRect(0, 6, 200, 50, 10);
+            buttonBackground2.fillStyle(0xf6d3d0, 1); 
+            buttonBackground2.fillRoundedRect(0, 0, 200, 50, 10);
+        });
+
+        //this.pauseButton = this.add.text(750, 700, 'Pausa', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        //this.pauseButton.setInteractive();
+        //this.pauseButton.on('pointerdown', () => this.pauseGame());
 
         this.pauseMenu = this.add.container(750, 300).setVisible(false);
         this.createPauseMenu();
@@ -119,9 +174,6 @@ class MainScene extends Phaser.Scene {
             const playerImage = this.add.image(10, 70 + index * 100 + 10, player.name).setScale(0.05);
             this.titansContainer.add([playerText, playerImage]);
         });
-
-        //this.godsSection.setText('Dioses\n' + this.gods.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
-        //this.titansSection.setText('Titanes\n' + this.titans.map(player => `${player.name} (${player.type}) - Casilla ${player.position}, Monedas: ${player.gold}, Piezas de armadura: ${player.armorPieces}`).join('\n'));
     }
 
     clearContainer(container) {
@@ -129,46 +181,49 @@ class MainScene extends Phaser.Scene {
     }
 
     rollDice() {
-        this.updateBoard();
+        if(this.turnvalid){
+            this.turnvalid = false
+            this.updateBoard();
 
-        const diceRoll = Math.floor(Math.random() * 6) + 1;
-        let currentPlayer;
-
-        if (this.turn === 'god') {
-            currentPlayer = this.gods[this.currentPlayerIndex % this.gods.length];
-        } else {
-            currentPlayer = this.titans[this.currentPlayerIndex % this.titans.length];
-            this.currentPlayerIndex++; // Solo incrementa el índice después de que ambos, dios y titán, hayan jugado
-        }
-
-        // Mover al jugador y revisar si pasa por la casilla 1
-        const previousPosition = currentPlayer.position;
-        currentPlayer.position = (currentPlayer.position + diceRoll - 1) % this.boardSize + 1;
-
-        // Si el jugador pasa por la casilla 1 (pero no en la primera vuelta)
-        if (previousPosition > currentPlayer.position) {
-            currentPlayer.gold += 3;
-        }
-
-        this.messageElement.setText(`${currentPlayer.name} (${currentPlayer.type}) tiró un ${diceRoll} y se movió a la casilla ${currentPlayer.position}.`);
-
-        // Animar el movimiento del sprite del personaje
-        this.movePlayerSprite(currentPlayer);
-
-        setTimeout(() => {
-            this.checkForDuel(currentPlayer);
-            this.checkForStore(currentPlayer);
-            this.verifyVictory();
-        }, 1000);
-
+            const diceRoll = Math.floor(Math.random() * 6) + 1;
+            let currentPlayer;
     
-        if (this.turn === 'god') {
-            this.turn = 'titan';
-        } else {
-            this.turn = 'god';
+            if (this.turn === 'god') {
+                currentPlayer = this.gods[this.currentPlayerIndex % this.gods.length];
+            } else {
+                currentPlayer = this.titans[this.currentPlayerIndex % this.titans.length];
+                this.currentPlayerIndex++; // Solo incrementa el índice después de que ambos, dios y titán, hayan jugado
+            }
+    
+            // Mover al jugador y revisar si pasa por la casilla 1
+            const previousPosition = currentPlayer.position;
+            currentPlayer.position = (currentPlayer.position + diceRoll - 1) % this.boardSize + 1;
+    
+            // Si el jugador pasa por la casilla 1 (pero no en la primera vuelta)
+            if (previousPosition > currentPlayer.position) {
+                currentPlayer.gold += 3;
+            }
+    
+            this.messageElement.setText(`${currentPlayer.name} (${currentPlayer.type}) tiró un ${diceRoll} y se movió a la casilla ${currentPlayer.position}.`);
+    
+            // Animar el movimiento del sprite del personaje
+            this.movePlayerSprite(currentPlayer);
+    
+            setTimeout(() => {
+                this.checkForDuel(currentPlayer);
+                this.checkForStore(currentPlayer);
+                this.verifyVictory();
+    
+                if (this.turn === 'god') {
+                    this.turn = 'titan';
+                } else {
+                    this.turn = 'god';
+                }
+                this.turnvalid = true
+            }, 1000);
+    
+            this.updateBoard(); 
         }
-
-        this.updateBoard();
     }
 
     movePlayerSprite(player) {
@@ -224,27 +279,107 @@ class MainScene extends Phaser.Scene {
 
     pauseGame() {
         this.pauseMenu.setVisible(true);
+        this.turnvalid = false
         this.rollDiceButton.disableInteractive();
     }
 
     createPauseMenu() {
-        const background = this.add.rectangle(0, 0, 300, 200, 0xffffff).setOrigin(0.5);
-        const continueButton = this.add.text(0, -50, 'Continuar', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
-        const saveButton = this.add.text(0, 0, 'Guardar y Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
-        const exitButton = this.add.text(0, 50, 'Salir sin Guardar', { fontSize: '18px', color: '#000' }).setOrigin(0.5).setInteractive();
+        const buttonBContinue = this.add.graphics();
+        buttonBContinue.fillStyle(0x7f4949, 1); 
+        buttonBContinue.fillRoundedRect(0, 6, 200, 30, 10);
+        buttonBContinue.fillStyle(0xf6d3d0, 1); 
+        buttonBContinue.fillRoundedRect(0, 0, 200, 30, 10);
 
-        continueButton.on('pointerdown', () => {
+        const buttonBExitS = this.add.graphics();
+        buttonBExitS.fillStyle(0x7f4949, 1); 
+        buttonBExitS.fillRoundedRect(0, 6, 200, 30, 10);
+        buttonBExitS.fillStyle(0xf6d3d0, 1); 
+        buttonBExitS.fillRoundedRect(0, 0, 200, 30, 10);
+
+        const buttonBExitNS = this.add.graphics();
+        buttonBExitNS.fillStyle(0x7f4949, 1); 
+        buttonBExitNS.fillRoundedRect(0, 6, 200, 30, 10);
+        buttonBExitNS.fillStyle(0xf6d3d0, 1); 
+        buttonBExitNS.fillRoundedRect(0, 0, 200, 30, 10);
+
+        const background = this.add.rectangle(0, 0, 400, 300, 0xEEE7E2).setOrigin(0.5);
+
+        const continueButtonText = this.add.text(100, 17, 'Continuar', { fontSize: '18px', color: '#000' }).setOrigin(0.5)
+        const continueButton = this.add.container(-100, -80, [buttonBContinue, continueButtonText]);
+        const hitAreaC = this.add.zone(0, 0, 200, 50).setOrigin(0, 0).setInteractive();
+        continueButton.add(hitAreaC)
+
+        const saveButtonText = this.add.text(100, 17, 'Guardar y Salir', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        const saveButton = this.add.container(-100, -20, [buttonBExitS, saveButtonText]);
+        const hitAreaS = this.add.zone(0, 0, 200, 50).setOrigin(0, 0).setInteractive();
+        saveButton.add(hitAreaS)
+
+        const exitButtonText = this.add.text(100, 17, 'Salir sin Guardar', { fontSize: '18px', color: '#000' }).setOrigin(0.5);
+        const exitButton = this.add.container(-100, 40, [buttonBExitNS, exitButtonText]);
+        const hitAreaNS = this.add.zone(0, 0, 200, 50).setOrigin(0, 0).setInteractive();
+        exitButton.add(hitAreaNS)
+
+        hitAreaC.on('pointerdown', () => {
             this.pauseMenu.setVisible(false);
+            this.turnvalid = true
             this.rollDiceButton.setInteractive();
         });
 
-        saveButton.on('pointerdown', () => {
+        hitAreaC.on('pointerover', () => {
+            buttonBContinue.clear();
+            buttonBContinue.fillStyle(0x7f4949, 1); 
+            buttonBContinue.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBContinue.fillStyle(0xb8dbc0, 1); 
+            buttonBContinue.fillRoundedRect(0, 0, 200, 30, 10);
+        });
+        
+        hitAreaC.on('pointerout', () => {
+            buttonBContinue.clear();
+            buttonBContinue.fillStyle(0x7f4949, 1); 
+            buttonBContinue.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBContinue.fillStyle(0xf6d3d0, 1); 
+            buttonBContinue.fillRoundedRect(0, 0, 200, 30, 10);
+        });
+
+        hitAreaS.on('pointerdown', () => {
             this.saveGame();
             window.location.href = '../index.html';
         });
 
-        exitButton.on('pointerdown', () => {
+        hitAreaS.on('pointerover', () => {
+            buttonBExitS.clear();
+            buttonBExitS.fillStyle(0x7f4949, 1); 
+            buttonBExitS.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBExitS.fillStyle(0xb8dbc0, 1); 
+            buttonBExitS.fillRoundedRect(0, 0, 200, 30, 10);
+        });
+        
+        hitAreaS.on('pointerout', () => {
+            buttonBExitS.clear();
+            buttonBExitS.fillStyle(0x7f4949, 1); 
+            buttonBExitS.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBExitS.fillStyle(0xf6d3d0, 1); 
+            buttonBExitS.fillRoundedRect(0, 0, 200, 30, 10);
+        });
+
+        hitAreaNS.on('pointerdown', () => {
             window.location.href = '../index.html';
+        });
+
+        hitAreaNS.on('pointerover', () => {
+            buttonBExitNS.clear();
+            buttonBExitNS.fillStyle(0x7f4949, 1); 
+            buttonBExitNS.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBExitNS.fillStyle(0xb8dbc0, 1); 
+            buttonBExitNS.fillRoundedRect(0, 0, 200, 30, 10);
+        });
+        
+        hitAreaNS.on('pointerout', () => {
+            buttonBExitNS.clear();
+            buttonBExitNS.fillStyle(0x7f4949, 1); 
+            buttonBExitNS.fillRoundedRect(0, 6, 200, 30, 10);
+            buttonBExitNS.fillStyle(0xf6d3d0, 1); 
+            buttonBExitNS.fillRoundedRect(0, 0, 200, 30, 10);
         });
 
         this.pauseMenu.add([background, continueButton, saveButton, exitButton]);
