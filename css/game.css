@@ -86,21 +86,24 @@ a{
 }
 
 @keyframes left-rotate {
-    0% { transform: rotate(-9deg); }
-    50% { transform: rotate(5.5deg); }
-    100% { transform: rotate(-9deg); }
+    0% { transform: rotate(-9deg) scale(0.25, 0.25) translate(-130px, -185px); }
+    50% { transform: rotate(3deg) scale(0.25, 0.25) translate(-130px, -185px); }
+    100% { transform: rotate(-9deg) scale(0.25, 0.25) translate(-130px, -185px); }
 }
 
 @keyframes right-rotate {
-    0% { transform: rotate(9deg); }
-    50% { transform: rotate(-4deg); }
-    100% { transform: rotate(9deg); }
+    0% { transform: rotate(9deg) scale(0.25, 0.25) translate(-90px, -185px); }
+    50% { transform: rotate(-3deg) scale(0.25, 0.25) translate(-90px, -185px); }
+    100% { transform: rotate(9deg) scale(0.25, 0.25) translate(-90px, -185px); }
 }
 
 .logo-wrapper{
-    height: 200px;
-    width: 200x;
-    background-color: red;
+    height: 50px;
+    width: 70px;
+    background-color: rgba(255, 0, 0, 0);
+    position:absolute;
+    top: 8px;
+    left: 17px;
 }
 
 .logo{
